@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="FR">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Philomanie{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('build/assets_styles_app_css.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header class="flex ">
+    <!-- Logo / Nom du site -->
+    <div class="flex justify-center text-2xl font-bold ">
+        <h1>Philomanie</h1>
+    </div>
+    <nav class="flex justify-self-end space-x-4">
+        <!-- Bouton mobile -->
+        {#    <button class="block sm:hidden focus:outline-none" id="navbar-toggle">#}
+        {#        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">#}
+        {#            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>#}
+        {#        </svg>#}
+        {#    </button>#}
+        <!-- Liens de navigation -->
+        <div class="flex space-x-4" id="navbar">
+            <a href="{{ path('homepage') }}" class="hover:text-gray-300">Accueil</a>
+            <a href="#about" class="hover:text-gray-300">À propos</a>
+            <a href="#blog" class="hover:text-gray-300">Blog</a>
+            <a href="#contact" class="hover:text-gray-300">Contact</a>
+        </div>
+    </nav>
+</header>
+<div id="content">{% block content %}{% endblock %}</div>
+<footer id="footer">
+    &copy; Copyright 2024 by <a href="https://example.com/">you</a>.
+</footer>
+</body>
+</html>
