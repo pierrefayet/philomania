@@ -5,7 +5,13 @@ module.exports = {
     './assets/**/*.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'merriweather-sans': ['Merriweather Sans', 'sans-serif'],
+        'montserrat': ['Montserrat', 'sans-serif'],
+        'raleway': ['Raleway', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }

@@ -1,52 +1,78 @@
 {% extends 'base.html.twig' %}
 {% block content %}
-<img src="{{ asset('build/images/penseur.jpg') }}" alt="Penseur de rodin" class="w-32 h-32">
-<p >
-    A l'image du "penseur" de Rodin, nous méditons sans laisse. Nous nous posons la question de liebnizt: "Pourquoi y a
-    t-il quelque chose que rien plutôt que rien ?"
-    Nous nous efforçons de faire progresser la pensée, les idées à l'aube de l'évolution de l'humanité, de ces avancées
-    scientifique et du développement sans fin des connaissances du pouvoir.
-    Alors reposons nous quelques questions fondamentales et réflichissons y ensemble afin de participer et d'alimenter
-    le débat philosophique : Tel est l'ambition de se blog.
-</p>
-<h3> Qui suis je ?</h3>
-<img src="{{ asset('build/images/Marcel_Fayet.jpg') }}" alt="Photo de moi" class="w-32 h-32">
-<p>
-    Je m'appelle Marcel FAYET et j’ai 67 ans. Je suis tombé dans le chaudron de la philo il y a une trentaine d’année.
-    Je n’ai que mon BEPC et suis rentré dans la vie active à 16 ans. Je suis à la retraite et actuellement je suis auto
-    entrepreneur en tant qu’éducateur sportif en running et marche nordique. Je suis autodidacte et donc non issu de la
-    filière classique universitaire. C’est grâce à mon fils Pierre que l’idée du blog est née et surtout grâce à ses
-    compétences qu’il existe et il sera notre « Webmaster ». C’est en lisant Ernst Jünger et Albert Camus que j’ai pris
-    le virus. « le travailleur », « le Mythe de Sisyphe » et « l’homme révolté » ont été mes premières découvertes. Puis
-    « L’Etre et le néant et les existentialistes m’ont définitivement fait entré dans le monde de la philosophie. La
-    philo c’est une passion – c’est accédé à l’espace illimité de la pensée qui restera toujours infini et il sera
-    nécessaire de continuer à défricher en permanence, génération après génération. A l’instar des langues, la
-    philosophie est vivante et c’est à cette condition qu’elle sera évoluer et se renouveler.
-</p>
-<h3>PRESENTATION DU BLOG</h3>
-<p>
-    En créant ce blog, mon souhait est d’échanger avec vous sur des thèmes philosophiques spécifiques et qui me semblent
-    intéressants et importants d’aborder, de creuser et faire évoluer avec vous et grâce à vous.
-    Je mettrai régulièrement en ligne un thème que je vous invite à prendre connaissance, à étudier et à publier vos
-    commentaires.
-    Une synthèse (enfin tentative de synthèse !) sera faite en fin de chaque cycle de réflexion pour résumer les idées,
-    les points de vue et les débats.
-    Ma volonté est que chacun(e) dise ce qu’il en pense et interagisse.
-    Je désire que les thématiques abordées soient vraiment traitées dans la nécessaire rigueur qu’exige la réflexion
-    philosophique.
-    Une charte de bonne conduite est jointe à l’inscription que je vous demande de lire, de respecter et d’adopter.
-    Je serai le modérateur de ce blog et donc j’aurai la responsabilité de retirer du blog celles et ceux qui ne la
-    respecteraient pas.
-    Je vous demande qu’il n’y ait pas de photos, de vidéos ni aucune images cela évitera bien des soucis !
-    La philo c’est avant tout l’écoute de l’autre, le respect des idées et des opinions de chacun(e). Je vous demande de
-    mettre vos idéaux et opinions politiques de côté ; ce blog ne sera pas un forum politique et j’y veillerai !
-    Je souhaite qu’il soit convivial, que la nuance soit de mise et qu’on ne se prenne pas trop au sérieux. L’humour est
-    plus que le bienvenu !
-    Enfin je vous demande d’agrémenter, dans la mesure du possible, vos démonstrations d’exemples concrets (car c’est la
-    plaie de beaucoup de philosophes qui oublient souvent d’en formuler !) et de faire comme si vous vous adressiez à
-    des personnes lambdas (dont je fais partie !). Je vous en suis reconnaissant à l’avance.
-    Alors, je vous attends et suis déjà impatient de vous lire.
+    <!-- Section image avec effet de relief -->
+    <div class="flex justify-center">
+        <img src="{{ asset('build/images/penseur.jpg') }}" alt="Penseur de Rodin"
+             class="w-[300px] rounded-lg shadow-xl m-8 transition-transform transform hover:scale-105">
+    </div>
 
-    Marcel. FAYET.
-</p>
+    <!-- Section philosophique (texte principal) -->
+    <div class="max-w-screen-md mx-auto p-6 bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105">
+        <p class="font-merriweather-sans leading-relaxed text-gray-700">
+            A l'image du "penseur" de Rodin, nous méditons sans laisse. Nous nous posons la question de Leibniz:
+            "Pourquoi y a-t-il quelque chose plutôt que rien ?"
+            Nous nous efforçons de faire progresser la pensée, les idées à l'aube de l'évolution de l'humanité, de ces
+            avancées scientifiques et du développement sans fin des connaissances du pouvoir.
+            Alors reposons-nous quelques questions fondamentales et réfléchissons ensemble afin de participer et
+            d'alimenter le débat philosophique : Tel est l'ambition de ce blog.
+        </p>
+    </div>
+
+    <!-- Séparateur -->
+    <hr class="border-t border-gray-300 my-8">
+
+    <!-- Section Présentation du blog (carte avec ombre et contenu structuré) -->
+    <div class="p-8 bg-blue-50 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+        <h3 class="text-center text-2xl font-bold text-blue-700 mb-4">PRESENTATION DU BLOG</h3>
+        <div class="max-w-screen-md mx-auto">
+            <p class="text-gray-700 leading-relaxed">
+                En créant ce blog, mon souhait est d’échanger avec vous sur des thèmes philosophiques spécifiques et qui me
+                semblent intéressants et importants d’aborder, de creuser et faire évoluer avec vous et grâce à vous.
+                Je mettrai régulièrement en ligne un thème que je vous invite à prendre connaissance, à étudier et à
+                publier vos commentaires.
+                Une synthèse (enfin tentative de synthèse !) sera faite en fin de chaque cycle de réflexion pour résumer les
+                idées, les points de vue et les débats.
+                Ma volonté est que chacun(e) dise ce qu’il en pense et interagisse. Je désire que les thématiques abordées
+                soient vraiment traitées dans la nécessaire rigueur qu’exige la réflexion philosophique.
+                Une charte de bonne conduite est jointe à l’inscription que je vous demande de lire, de respecter et
+                d’adopter. Je serai le modérateur de ce blog et donc j’aurai la responsabilité de retirer du blog celles et
+                ceux qui ne la respecteraient pas.
+                Je vous demande qu’il n’y ait pas de photos, de vidéos ni aucune image, cela évitera bien des soucis !
+                La philo c’est avant tout l’écoute de l’autre, le respect des idées et des opinions de chacun(e). Je vous
+                demande de mettre vos idéaux et opinions politiques de côté ; ce blog ne sera pas un forum politique et j’y
+                veillerai !
+                Je souhaite qu’il soit convivial, que la nuance soit de mise et qu’on ne se prenne pas trop au sérieux.
+                L’humour est plus que le bienvenu !
+                Enfin je vous demande d’agrémenter, dans la mesure du possible, vos démonstrations d’exemples concrets (car
+                c’est la plaie de beaucoup de philosophes qui oublient souvent d’en formuler !) et de faire comme si vous
+                vous adressiez à des personnes lambdas (dont je fais partie !). Je vous en suis reconnaissant à l’avance.
+                Alors, je vous attends et suis déjà impatient de vous lire.
+            </p>
+            <p class="text-gray-700 font-bold mt-4">Marcel FAYET</p>
+        </div>
+    </div>
+
+    <!-- Section Qui suis-je -->
+    <h3 class="text-center text-2xl font-bold text-gray-700 m-8">Qui suis-je ?</h3>
+    <div class="flex justify-center">
+        <img src="{{ asset('build/images/Marcel_Fayet.jpeg') }}" alt="Photo de moi"
+             class="w-[300px] rounded-lg shadow-lg m-8 transition-transform transform hover:scale-105">
+    </div>
+
+    <!-- Texte biographique -->
+    <div class="max-w-screen-md mx-auto p-6 bg-white rounded-lg shadow-lg transition-transform transform hover:scale-105">
+        <p class="font-merriweather-sans leading-relaxed text-gray-700">
+            Je m'appelle Marcel FAYET et j’ai 67 ans. Je suis tombé dans le chaudron de la philo il y a une trentaine
+            d’années. Je n’ai que mon BEPC et suis rentré dans la vie active à 16 ans. Je suis à la retraite et
+            actuellement je suis auto-entrepreneur en tant qu’éducateur sportif en running et marche nordique. Je suis
+            autodidacte et donc non issu de la filière classique universitaire. C’est grâce à mon fils Pierre que l’idée
+            du blog est née et surtout grâce à ses compétences qu’il existe et il sera notre « Webmaster ».
+            C’est en lisant Ernst Jünger et Albert Camus que j’ai pris le virus. « Le Travailleur », « Le Mythe de
+            Sisyphe » et « L’Homme révolté » ont été mes premières découvertes. Puis « L’Être et le Néant » et les
+            existentialistes m’ont définitivement fait entrer dans le monde de la philosophie.
+            La philo, c’est une passion – c’est accéder à l’espace illimité de la pensée qui restera toujours infini, et
+            il sera nécessaire de continuer à défricher en permanence, génération après génération. À l’instar des
+            langues, la philosophie est vivante et c’est à cette condition qu’elle pourra évoluer et se renouveler.
+        </p>
+    </div>
 {% endblock %}
