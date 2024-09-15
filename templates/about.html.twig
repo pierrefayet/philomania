@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <!-- Sidebar - About Me Section -->
+    <div class="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Qui suis-je ?</h2>
+        <img src="{{ asset('build/images/Marcel_Fayet.jpeg') }}" alt="Photo de Marcel Fayet"
+             class="rounded-full w-[200px] h-[200px] object-cover mb-4 shadow-md">
+        <p class="text-gray-600 leading-relaxed text-center">
+            Je m'appelle Marcel FAYET et j’ai 67 ans. Je suis tombé dans le chaudron de la philo il y a une trentaine d’années.
+            Je n’ai que mon BEPC et suis rentré dans la vie active à 16 ans. Je suis à la retraite et actuellement je suis
+            auto-entrepreneur en tant qu’éducateur sportif en running et marche nordique. Je suis autodidacte et donc non issu
+            de la filière classique universitaire. C’est grâce à mon fils Pierre que l’idée du blog est née et surtout grâce à
+            ses compétences qu’il existe et il sera notre « Webmaster ».
+            C’est en lisant Ernst Jünger et Albert Camus que j’ai pris le virus. « Le Travailleur », « Le Mythe de Sisyphe »
+            et « L’Homme révolté » ont été mes premières découvertes. Puis « L’Être et le Néant » et les existentialistes m’ont
+            définitivement fait entrer dans le monde de la philosophie. La philo, c’est une passion – c’est accéder à l’espace
+            illimité de la pensée qui restera toujours infini, et il sera nécessaire de continuer à défricher en permanence,
+            génération après génération. À l’instar des langues, la philosophie est vivante et c’est à cette condition qu’elle
+            pourra évoluer et se renouveler.
+        </p>
+    </div>
+
+{% endblock %}

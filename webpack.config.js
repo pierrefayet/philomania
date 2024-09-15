@@ -11,7 +11,7 @@ Encore
     .copyFiles({
         from: './assets/images',
         to: 'images/[path][name].[hash:8].[ext]',
-        pattern: /\.(png|jpg|jpeg)$/
+        pattern: /\.(png|jpg|jpeg|webp)$/
     })
     .addEntry('app', './assets/app.js')
     .addStyleEntry('styles', './assets/styles/app.css')
