@@ -12,38 +12,37 @@
               rel="stylesheet">
     {% endblock %}
 </head>
-<body class="bg-gradient-radial from-gray-200 to-gray-400">
-<header class="h-[100px]">
+<body class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 ">
+<header class="h-[100px] bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-2xl rounded-b-lg z-50">
     <div class="flex justify-between m-8">
         <div class="text-center">
-            <h1 class="text-4xl font-bold">Philomanie</h1>
+            <h1 class="font-merriweather-sans text-4xl font-bold text-white">Philomanie</h1>
         </div>
         <nav>
-            <div class="flex  justify-center space-x-6 font-medium text-xl" id="navbar">
-                <a href="{{ path('homepage') }}" class="hover:text-gray-300">Accueil</a>
-                <a href="{{ path('about') }}" class="hover:text-gray-300">À propos</a>
-                <a href="#blog" class="hover:text-gray-300">Blog</a>
-                <a href="#contact" class="hover:text-gray-300">Contact</a>
+            <div class="flex justify-center space-x-6 font-medium text-xl text-white" id="navbar">
+                <a href="{{ path('homepage') }}" class="font-merriweather-sans hover:text-gray-300">Accueil</a>
+                <a href="{{ path('connexion') }}" class="font-merriweather-sans hover:text-gray-300">Connexion</a>
+                <a href="{{ path('sign_in') }}" class="font-merriweather-sans hover:text-gray-300">Crée un compte</a>
+                <a href="{{ path('about') }}" class="font-merriweather-sans hover:text-gray-300">Qui suis je ?</a>
+                <a href="{{ path('theme') }}" class="font-merriweather-sans hover:text-gray-300">Theme</a>
+                <a href="{{ path('contact') }}" class="font-merriweather-sans hover:text-gray-300">Contact</a>
             </div>
         </nav>
     </div>
 </header>
-<main>
-    <section>
-        <img src="{{ asset('build/images/banner.webp') }}" alt="banniere" class="w-full h-[200px] object-cover">
-    </section>
-    <div id="content">
-        {% block content %}
-        {% endblock %}
-    </div>
-</main>
+<section>
+    <img src="{{ asset('build/images/banner.webp') }}" alt="banniere" class="h-[290px] object-cover w-full">
+</section>
 
-<footer id="footer" class="flex justify-center m-12 space-x-4">
-    <p class="font-medium">&copy; Copyright 2024</p>
-    <a href="https://example.com/" class="mg-2 font-medium">Pierre Fayet</a>.
+{% block content %}
+{% endblock %}
+
+<footer id="footer" class="flex justify-center items-center space-x-4 h-[100px]">
+    <p class="font-montserrat font-medium text-white">&copy; Copyright 2024</p>
+    <a href="https://example.com/" class="font-montserrat font-medium text-white hover:text-gray-300">Pierre Fayet</a>
 </footer>
 
-{% block javascripts %}{% endblock %}
+    {% block javascripts %}{% endblock %}
 </body>
 </html>
 

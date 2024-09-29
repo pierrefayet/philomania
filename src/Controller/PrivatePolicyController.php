@@ -6,11 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class HomePageController extends AbstractController
+class PrivatePolicyController extends AbstractController
 {
-    #[Route('/', name: 'homepage')]
-    public function home(): Response
+    #[Route('/charte', name: 'charte')]
+    public function charte(): Response
     {
-        return $this->render('homepage.html.twig');
+       return $this->render('PrivatePolicy.html.twig');
     }
 }
