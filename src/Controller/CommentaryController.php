@@ -15,12 +15,4 @@ class CommentaryController extends AbstractController
             'controller_name' => 'CommentaryController',
         ]);
     }
-
-    #[Route('/commentary', name: 'app_commentary')]
-    public function getCommentary(): Response
-    {
-        return $this->render('commentary/index.html.twig', [
-            'controller_name' => 'CommentaryController',
-        ]);
-    }
 }
