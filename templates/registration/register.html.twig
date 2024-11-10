@@ -3,8 +3,8 @@
 {% block title %}Création de compte{% endblock %}
 
 {% block body %}
-    <main class="h-screen bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 flex items-center justify-center">
-        <div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8 shadow-lg rounded-lg max-w-md w-full mx-4">
+    <main class="bg-white flex items-center justify-center">
+        <div class="bg-white px-6 py-24 sm:py-32 lg:px-8 shadow-lg rounded-lg max-w-lg w-full mx-4">
             <div class="text-center">
                 <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Création de compte</h2>
                 <p class="mt-2 text-lg leading-8 text-gray-600">Veuillez remplir le formulaire pour créer votre compte.</p>
@@ -15,6 +15,7 @@
             {% endfor %}
 
             <form method="post" class="mx-auto mt-16 max-w-xl sm:mt-20">
+                {{ form_start(registrationForm) }}
                 <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
 
                     <div class="sm:col-span-2">
@@ -25,24 +26,24 @@
                     </div>
 
                     <div class="sm:col-span-2">
-                        {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'block text-sm font-semibold leading-6 text-gray-900'}}) }}
+                        {{ form_label(registrationForm.password, 'Mot de passe', {'label_attr': {'class': 'block text-sm font-semibold leading-6 text-gray-900'}}) }}
                         <div class="mt-2.5">
-                            {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm'}}) }}
+                            {{ form_row(registrationForm.password, {'attr': {'class': 'block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm'}}) }}
                         </div>
                     </div>
 
                     <div class="flex gap-x-4 sm:col-span-2">
                         {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'rounded-full bg-gray-200 p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'}}) }}
-                        <label class="text-sm leading-6 text-gray-600">
-                            Séléctionner, si vous êtes d'accord avec la
+                        <label class="text-sm text-gray-600">
+                            Cochez, si vous êtes d'accord avec la
                             <a href="{{ path('charte') }}" class="font-semibold text-indigo-600">charte de bonne conduite</a>.
                         </label>
                     </div>
                 </div>
-
                 <div class="mt-10">
                     <button type="submit" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Créer un compte</button>
                 </div>
+                {{ form_end(registrationForm) }}
             </form>
         </div>
     </main>

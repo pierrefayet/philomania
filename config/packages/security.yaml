@@ -19,9 +19,12 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                enable_csrf: true
+                username_parameter: connexion_form[email]
+                password_parameter: connexion_form[password]
+                enable_csrf: false
             logout:
                 path: app_logout
+                target: app_login
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -39,6 +42,7 @@ security:
          - { path: ^/theme, roles: ROLE_USER }
          - { path: ^/profile, roles: ROLE_USER }
          - { path: ^/history, roles: ROLE_USER  }
+         - { path: ^/verify/email, roles: PUBLIC_ACCESS }
          - { path: ^/about, roles: PUBLIC_ACCESS  }
          - { path: ^/sign_in, roles: PUBLIC_ACCESS  }
          - { path: ^/chart, roles: PUBLIC_ACCESS }

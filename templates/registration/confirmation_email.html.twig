@@ -1,11 +1,39 @@
-<h1>Bonjour!</h1>
+<div class="app font-sans min-w-screen min-h-screen bg-gray-100 py-8 px-4">
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
+    <div class="mail__wrapper max-w-md mx-auto">
 
-<p>
-    Cheers!
-</p>
+        <div class="mail__content bg-white p-8 shadow-md">
+
+            <div class="content__header text-center tracking-wide border-b">
+                <div class="text-red-600 text-sm font-bold">Philomanie.FR</div>
+                <h1 class="text-3xl h-48 flex items-center justify-center">Confirmation d'Email</h1>
+            </div>
+
+            <div class="content__body py-8 border-b">
+                <p>
+                    Bonjour, <br><br>
+                    Nous sommes ravis de vous accueillir sur Philomanie ! Pour finaliser votre inscription, veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous.
+                </p>
+                <a href="{{ signedUrl|raw }}" class="text-white text-sm tracking-wide bg-red-600 rounded w-full my-8 p-4 block text-center no-underline">CONFIRMER MON ADRESSE EMAIL</a>
+                <p class="text-sm">
+                    À très bientôt !<br> L'équipe Philomanie
+                </p>
+            </div>
+
+            <div class="content__footer mt-8 text-center text-gray-600">
+                <p>www.Philomanie.fr</p>
+            </div>
+
+        </div>
+
+            <div class="meta__help">
+                <p class="leading-loose">
+                    Des questions ou des préoccupations ? <a href="mailto:contactphilomanie@gmail.com" class="text-gray-800">contactphilomanie@gmail.com</a>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

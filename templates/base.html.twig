@@ -6,6 +6,7 @@
     <title>{% block title %}Philomanie{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('build/assets_styles_app_css.css') }}">
+        <link rel="icon" href="{{ asset('build/images/favicon.webp') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
@@ -13,7 +14,7 @@
     {% endblock %}
 </head>
 <body class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 ">
-<header class="h-[100px] bg-opacity-20 backdrop-filter backdrop-blur-lg shadow-2xl rounded-b-lg z-50">
+<header class="bg-opa city-20">
     <div class="flex justify-between m-8">
         <div class="text-center">
             <h1 class="font-merriweather-sans text-4xl font-bold text-white">Philomanie</h1>
@@ -22,7 +23,7 @@
             <div class="flex justify-center space-x-6 font-medium text-xl text-white" id="navbar">
                 <a href="{{ path('homepage') }}" class="font-merriweather-sans hover:text-gray-300">Accueil</a>
                 <a href="{{ path('app_login') }}" class="font-merriweather-sans hover:text-gray-300">Connexion</a>
-                <a href="{{ path('sign_in') }}" class="font-merriweather-sans hover:text-gray-300">Crée un compte</a>
+                <a href="{{ path('app_register') }}" class="font-merriweather-sans hover:text-gray-300">Crée un compte</a>
                 <a href="{{ path('about') }}" class="font-merriweather-sans hover:text-gray-300">Qui suis je ?</a>
                 <a href="{{ path('theme') }}" class="font-merriweather-sans hover:text-gray-300">Theme</a>
                 <a href="{{ path('contact') }}" class="font-merriweather-sans hover:text-gray-300">Contact</a>
