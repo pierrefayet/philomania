@@ -20,7 +20,7 @@ class Theme
     private ?string $content = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $synthetize = null;
+    private ?string $synthesize = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -64,14 +64,14 @@ class Theme
         return $this;
     }
 
-    public function getSynthetize(): ?string
+    public function getSynthesize(): ?string
     {
-        return $this->synthetize;
+        return $this->synthesize;
     }
 
-    public function setSynthetize(?string $synthetize): void
+    public function setSynthesize(?string $synthesize): void
     {
-        $this->synthetize = $synthetize;
+        $this->synthesize = $synthesize;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

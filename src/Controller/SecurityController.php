@@ -17,7 +17,6 @@ class SecurityController extends AbstractController
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(Request $request, AuthenticationUtils $authUtils, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        dump($request->request->all());
         $error = $authUtils->getLastAuthenticationError();
         $user = new User();
         $form = $this->createForm(ConnexionFormType::class, $user);

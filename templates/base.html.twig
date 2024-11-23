@@ -22,8 +22,12 @@
         <nav>
             <div class="flex justify-center space-x-6 font-medium text-xl text-white" id="navbar">
                 <a href="{{ path('homepage') }}" class="font-merriweather-sans hover:text-gray-300">Accueil</a>
-                <a href="{{ path('app_login') }}" class="font-merriweather-sans hover:text-gray-300">Connexion</a>
-                <a href="{{ path('app_register') }}" class="font-merriweather-sans hover:text-gray-300">Crée un compte</a>
+                {% if not app.user %}
+                    <a href="{{ path('app_login') }}" class="font-merriweather-sans hover:text-gray-300">Connexion</a>
+                    <a href="{{ path('app_register') }}" class="font-merriweather-sans hover:text-gray-300">Crée un compte</a>
+                {% else %}
+                    <a href="{{ path('app_logout') }}" class="font-merriweather-sans hover:text-gray-300">Déconnexion</a>
+                {% endif %}
                 <a href="{{ path('about') }}" class="font-merriweather-sans hover:text-gray-300">Qui suis je ?</a>
                 <a href="{{ path('theme') }}" class="font-merriweather-sans hover:text-gray-300">Theme</a>
                 <a href="{{ path('contact') }}" class="font-merriweather-sans hover:text-gray-300">Contact</a>

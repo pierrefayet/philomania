@@ -11,6 +11,6 @@ class PrivatePolicyController extends AbstractController
     #[Route('/charte', name: 'charte')]
     public function charte(): Response
     {
-       return $this->render('PrivatePolicy.html.twig');
+       return $this->render('privatePolicy.html.twig');
     }
 }

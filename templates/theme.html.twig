@@ -1,38 +1,58 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <main>
-        <div class="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg">
-            <div class="flex justify-between w-[60%]">
-                <h2 class="font-merriweather-sans text-3xl font-bold text-gray-800 mb-4 flex items-center">Qui suis-je
-                    ?</h2>
-                <img src="{{ asset('build/images/Marcel_Fayet.jpeg') }}" alt="Photo de Marcel Fayet"
-                     class="rounded-full w-[170px] h-[140px] object-cover mb-4 shadow-md">
+    <main class="flex justify-center bg-white shadow-lg h-[800px]">
+        <div class="container mt-4 flex flex-col justify-center items-center">
+            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4 ">
+                <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">THEME DU JOUR
+                </h3>
+                <div class="mx-auto">
+                    <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base">
+                        « Je laisse Sisyphe au bas de la montagne ! On retrouve toujours son fardeau. Mais Sisyphe
+                        enseigne la fidélité supérieure qui nie les dieux et soulève les rochers. Lui aussi juge que
+                        tout est bien. Cet univers désormais sans maître lui paraît ni stérile ni futile. Chacun des
+                        grains de cette pierre, chaque éclat minéral de cette montagne pleine de nuit, à lui seul, forme
+                        un monde. La lutte elle-même vers les sommets suffit à remplir un cœur d’homme. Il faut imaginer
+                        Sisyphe heureux. »
+
+                        Voilà donc le premier thème : Faut-il imaginer Sisyphe heureux ?
+
+                        Moi, je vous pose la question, mais Albert Camus, lui, nous enjoint de l’imaginer heureux et
+                        fait appel ainsi à un acte de volonté.
+
+                        Pour lui, même au comble de la situation absurde, l’être, ici en l’occurrence Sisyphe, trouve
+                        une raison à sa vie. Il va arriver au sommet de la montagne pour lâcher enfin son rocher, et,
+                        les bras libres de toute contrainte, redescendre son fardeau. À cet instant, il est libre et
+                        peut se penser heureux.
+
+                        Mais comme le dit Camus : « on retrouve toujours son fardeau », et nous aussi, tous les jours,
+                        dans la répétition de notre quotidien !
+
+                        Je ne peux m’empêcher de voir en Sisyphe, dans l’acceptation de son destin, les signes de «
+                        l’éternel retour » nietzschéen : « cette vie telle que tu l’as vécue et telle que tu l’as vécu,
+                        il te faudra la vivre encore une fois et d’innombrables fois, et elle ne comportera rien de
+                        nouveau au contraire. »
+
+                        Sisyphe a été condamné par les dieux à vivre en enfer, car il n’a pas tenu sa promesse de
+                        retourner au royaume des morts. Sa ruse l’a perdu, et on ne triche pas avec les dieux !
+
+                        Aurions-nous aussi été condamnés, par le fait d’avoir été jetés en ce monde, sans l’avoir voulu,
+                        à vivre, nous aussi, notre absurde destinée ?
+                    </p>
+                    <p class="text-gray-700 font-bold mt-4">Marcel FAYET</p>
+                </div>
             </div>
-            <p class="font-montserrat text-gray-600 leading-relaxed p-8 rounded-lg shadow-lg bg-blue-50 w-[100%]">
-                Je m'appelle Marcel FAYET et j’ai 67 ans. Je suis tombé dans le chaudron de la philo il y a une
-                trentaine d’années.
-                Je n’ai que mon BEPC et suis rentré dans la vie active à 16 ans. Je suis à la retraite et actuellement
-                je suis
-                auto-entrepreneur en tant qu’éducateur sportif en running et marche nordique. Je suis autodidacte et
-                donc non issu
-                de la filière classique universitaire. C’est grâce à mon fils Pierre que l’idée du blog est née et
-                surtout grâce à
-                ses compétences qu’il existe et il sera notre « Webmaster ».
-                C’est en lisant Ernst Jünger et Albert Camus que j’ai pris le virus. « Le Travailleur », « Le Mythe de
-                Sisyphe »
-                et « L’Homme révolté » ont été mes premières découvertes. Puis « L’Être et le Néant » et les
-                existentialistes m’ont
-                définitivement fait entrer dans le monde de la philosophie. La philo, c’est une passion – c’est accéder
-                à l’espace
-                illimité de la pensée qui restera toujours infini, et il sera nécessaire de continuer à défricher en
-                permanence,
-                génération après génération. À l’instar des langues, la philosophie est vivante et c’est à cette
-                condition qu’elle
-                pourra évoluer et se renouveler.
-            </p>
+        </div>
+        <div class="container mt-4 flex flex-col justify-center items-center">
+            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4 ">
+                <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">THEME DU JOUR
+                </h3>
+                <div class="mx-auto">
+                    <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base">
+                    </p>
+                    <p class="text-gray-700 font-bold mt-4"></p>
+                </div>
+            </div>
         </div>
     </main>
-
-
 {% endblock %}
