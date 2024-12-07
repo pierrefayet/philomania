@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ThemeRepository;
+use App\Repository\SyntheseRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ThemeRepository::class)]
-class Theme
+#[ORM\Entity(repositoryClass: SyntheseRepository::class)]
+class Synthesis
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,23 +18,19 @@ class Theme
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $content = null;
-
-    #[ORM\OneToOne(targetEntity: Synthesis::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Synthesis $synthesize = null;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column]
-    private bool $isActive = false;
+    #[ORM\OneToOne(targetEntity: Theme::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Theme $theme = null;
 
     public function __construct()
     {
@@ -46,7 +42,6 @@ class Theme
     {
         return $this->id;
     }
-
 
     public function getTitle(): ?string
     {
@@ -65,21 +60,9 @@ class Theme
         return $this->content;
     }
 
-    public function setContent(?string $content): static
+    public function setContent(?string $content): void
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getSynthesize(): Synthesis
-    {
-        return $this->synthesize;
-    }
-
-    public function setSynthesize(?string $synthesize): void
-    {
-        $this->synthesize = $synthesize;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -99,32 +82,30 @@ class Theme
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(User $user): static
+    public function getTheme(): ?Theme
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?Theme $theme): void
+    {
+        $this->theme = $theme;
+    }
+
+    public function setUser(?User $user): void
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->isActive;
-    }
-
-    public function setIsActive(bool $isActive): void
-    {
-        $this->isActive = $isActive;
     }
 }

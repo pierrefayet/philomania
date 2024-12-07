@@ -11,6 +11,6 @@ class ThemeController extends AbstractController
     #[Route('/theme', name: 'theme')]
     public function theme(): Response
     {
-       return $this->render('theme.html.twig');
+       return $this->render('/theme/theme.html.twig');
     }
 }

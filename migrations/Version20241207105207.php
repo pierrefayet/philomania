@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241013134555 extends AbstractMigration
+final class Version20241207105207 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20241013134555 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE form ADD synthetize LONGTEXT DEFAULT NULL, ADD is_active TINYINT(1) NOT NULL');
+        $this->addSql('ALTER TABLE synthesis DROP INDEX IDX_593C04B6A76ED395, ADD UNIQUE INDEX UNIQ_593C04B6A76ED395 (user_id)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE form DROP synthetize, DROP is_active');
+        $this->addSql('ALTER TABLE synthesis DROP INDEX UNIQ_593C04B6A76ED395, ADD INDEX IDX_593C04B6A76ED395 (user_id)');
     }
 }
