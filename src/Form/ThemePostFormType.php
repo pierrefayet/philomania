@@ -2,13 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Synthesis;
+use App\Entity\Theme;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SynthesisFormType extends AbstractType
+class ThemePostFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -30,13 +31,26 @@ class SynthesisFormType extends AbstractType
                     'class' => 'block text-sm font-semibold leading-6 text-gray-900',
                 ],
                 'label' => 'Contenu texte',
+            ])
+            ->add('isActive', ChoiceType::class, [
+                'choices' => [
+                    'Oui' => true,
+                    'Non' => false,
+                ],
+                'label' => 'Actif',
+                'expanded' => true,
+                'multiple' => false,
+                'required' => true,
+                'attr' => [
+                    'class' => 'flex space-x-4'
+                ],
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Synthesis::class,
+            'data_class' => Theme::class,
         ]);
     }
 }

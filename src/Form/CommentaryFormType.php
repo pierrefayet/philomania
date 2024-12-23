@@ -16,7 +16,7 @@ class CommentaryFormType extends AbstractType
             ->add('createdAt', null, [
                 'widget' => 'single_text',
             ])
-            ->add('userId')
+            ->add('userName')
         ;
     }
 

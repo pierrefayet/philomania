@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ThemeRepository;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ThemeRepository::class)]
 class Theme
 {
@@ -13,15 +15,15 @@ class Theme
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text' , nullable: true)]
     private ?string $content = null;
 
     #[ORM\OneToOne(targetEntity: Synthesis::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
-    private ?Synthesis $synthesize = null;
+    private ?Synthesis $synthesis = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
@@ -72,14 +74,20 @@ class Theme
         return $this;
     }
 
-    public function getSynthesize(): Synthesis
+    public function getSynthesis(): ?Synthesis
     {
-        return $this->synthesize;
+        return $this->synthesis;
     }
 
-    public function setSynthesize(?string $synthesize): void
+    public function setSynthesis(?Synthesis $synthesis): static
     {
-        $this->synthesize = $synthesize;
+        $this->synthesis = $synthesis;
+
+        if ($synthesis !== null && $synthesis->getTheme() !== $this) {
+            $synthesis->setTheme($this);
+        }
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -123,8 +131,24 @@ class Theme
         return $this->isActive;
     }
 
-    public function setIsActive(bool $isActive): void
+    public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function checkSynthesis(PreUpdateEventArgs $event): void
+    {
+        if ($event->hasChangedField('synthesis') && $this->synthesis !== null) {
+            $this->isActive = false;
+        }
     }
 }

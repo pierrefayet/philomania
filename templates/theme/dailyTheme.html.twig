@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="flex justify-center bg-white shadow-lg h-[800px]">
+        <div class="container mt-4 flex flex-col justify-center items-center">
+
+            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
+                <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
+                    THEME DU JOUR
+                </h3>
+                <div class="mx-auto">
+                    {% if theme %}
+                        <h2 class="font-montserrat text-xl font-bold text-gray-800">{{ theme.title }}</h2>
+                        <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base mt-4">
+                            {{ theme.content }}
+                        </p>
+                    {% else %}
+                        <p class="text-gray-700 font-medium text-center">Aucun thème actif pour le moment.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
+                <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
+                    SYNTHÈSE
+                </h3>
+                <div class="mx-auto">
+                    {% if theme and theme.synthesis %}
+                        <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base">
+                            {{ theme.synthesis.content }}
+                        </p>
+                    {% else %}
+                        <p class="text-gray-700 font-medium text-center">
+                            {% if theme %}
+                                Aucune synthèse disponible pour ce thème.
+                            {% else %}
+                                Aucune synthèse disponible pour le moment.
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

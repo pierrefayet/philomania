@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SyntheseRepository;
+use App\Repository\SynthesisRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SyntheseRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: SynthesisRepository::class)]
 class Synthesis
 {
     #[ORM\Id]
@@ -13,24 +14,30 @@ class Synthesis
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content = null;
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt;
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     #[ORM\OneToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToOne(targetEntity: Theme::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Theme::class, mappedBy: 'synthesis', cascade: ['persist'])]
     private ?Theme $theme = null;
+
 
     public function __construct()
     {
@@ -60,9 +67,11 @@ class Synthesis
         return $this->content;
     }
 
-    public function setContent(?string $content): void
+    public function setContent(?string $content): static
     {
         $this->content = $content;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -82,16 +91,16 @@ class Synthesis
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getTheme(): ?Theme
@@ -99,13 +108,25 @@ class Synthesis
         return $this->theme;
     }
 
-    public function setTheme(?Theme $theme): void
+    public function setTheme(?Theme $theme): static
     {
         $this->theme = $theme;
+
+        if ($theme !== null && $theme->getSynthesis() !== $this) {
+            $theme->setSynthesis($this);
+        }
+
+        return $this;
     }
 
-    public function setUser(?User $user): void
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updateTimestamps(): void
     {
-        $this->user = $user;
+        $this->updatedAt = new \DateTimeImmutable();
+
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
     }
 }

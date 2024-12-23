@@ -11,7 +11,7 @@ class CommentModerationController extends AbstractController
     #[Route('/comment/moderation', name: 'app_comment_moderation')]
     public function index(): Response
     {
-        return $this->render('comment_moderation/index.html.twig', [
+        return $this->render('comment_moderation/postCommentary.html.twig', [
             'controller_name' => 'CommentModerationController',
         ]);
     }

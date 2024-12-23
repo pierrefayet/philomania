@@ -22,6 +22,14 @@ class Commentary
     #[ORM\Column]
     private ?int $userId = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: Theme::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Theme $theme = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +55,28 @@ class Commentary
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
+    public function getTheme(): ?Theme
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?Theme $theme): static
+    {
+        $this->theme = $theme;
 
         return $this;
     }

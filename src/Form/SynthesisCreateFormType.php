@@ -2,13 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Synthesis;
 use App\Entity\Theme;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ThemeFormType extends AbstractType
+class SynthesisCreateFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -30,13 +32,24 @@ class ThemeFormType extends AbstractType
                     'class' => 'block text-sm font-semibold leading-6 text-gray-900',
                 ],
                 'label' => 'Contenu texte',
+            ])
+            ->add('theme', EntityType::class, [
+                'class' => Theme::class,
+                'choice_label' => 'title',
+                'label' => 'Thème associé',
+                'placeholder' => 'Sélectionnez un thème',
+                'required' => true,
+                'attr' => [
+                    'class' => 'block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm',
+                ],
             ]);
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Theme::class,
+            'data_class' => Synthesis::class,
         ]);
     }
 }

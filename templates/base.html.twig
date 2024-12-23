@@ -19,22 +19,35 @@
         <div class="text-center">
             <h1 class="font-merriweather-sans text-4xl font-bold text-white">Philomanie</h1>
         </div>
+        {% if app.user %}
+            <span class="font-merriweather-sans text-gray-200">Bienvenue, {{ app.user.email }}</span>
+        {% endif %}
         <nav>
-            <div class="flex justify-center space-x-6 font-medium text-xl text-white" id="navbar">
-                <a href="{{ path('homepage') }}" class="font-merriweather-sans hover:text-gray-300">Accueil</a>
-                {% if not app.user %}
-                    <a href="{{ path('app_login') }}" class="font-merriweather-sans hover:text-gray-300">Connexion</a>
-                    <a href="{{ path('app_register') }}" class="font-merriweather-sans hover:text-gray-300">Crée un compte</a>
-                {% else %}
-                    <a href="{{ path('app_logout') }}" class="font-merriweather-sans hover:text-gray-300">Déconnexion</a>
-                {% endif %}
-                <a href="{{ path('about') }}" class="font-merriweather-sans hover:text-gray-300">Qui suis je ?</a>
-                <a href="{{ path('theme') }}" class="font-merriweather-sans hover:text-gray-300">Themes</a>
-                <a href="{{ path('app_theme_form') }}" class="font-merriweather-sans hover:text-gray-300">Form-theme</a>
-                <a href="{{ path('app_synthesis_form') }}" class="font-merriweather-sans hover:text-gray-300">Synthese</a>
-                <a href="{{ path('contact') }}" class="font-merriweather-sans hover:text-gray-300">Contact</a>
+            <div class="flex flex-col space-y-4 font-medium text-xl text-white" id="navbar">
+                <div class="flex justify-center space-x-6">
+                    <a href="{{ path('homepage') }}" class="font-merriweather-sans hover:text-gray-300">Accueil</a>
+                    <a href="{{ path('about') }}" class="font-merriweather-sans hover:text-gray-300">Qui suis-je ?</a>
+                    <a href="{{ path('contact') }}" class="font-merriweather-sans hover:text-gray-300">Contact</a>
+                </div>
+                <div class="flex justify-center space-x-6">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('daily-theme') }}" class="font-merriweather-sans hover:text-gray-300">Theme</a>
+                        <a href="{{ path('app_theme_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Theme</a>
+                        <a href="{{ path('app_synthesis_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Synthese</a>
+                    {% endif %}
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}"
+                           class="font-merriweather-sans hover:text-gray-300">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}"
+                           class="font-merriweather-sans hover:text-gray-300">Connexion</a>
+                        <a href="{{ path('app_register') }}" class="font-merriweather-sans hover:text-gray-300">Créer un
+                            compte</a>
+                    {% endif %}
+                </div>
             </div>
         </nav>
+
     </div>
 </header>
 <section>
@@ -49,7 +62,7 @@
     <a href="https://example.com/" class="font-montserrat font-medium text-white hover:text-gray-300">Pierre Fayet</a>
 </footer>
 
-    {% block javascripts %}{% endblock %}
+{% block javascripts %}{% endblock %}
 </body>
 </html>
 

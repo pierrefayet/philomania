@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '../base.html.twig' %}
 
 {% block title %}Création de compte{% endblock %}
 
@@ -24,6 +24,10 @@
                     <div class="sm:col-span-2">
                         {{ form_label(themeForm.content) }}
                         {{ form_widget(themeForm.content) }}
+                    </div>
+                    <div class="sm:col-span-2">
+                        {{ form_label(themeForm.isActive) }}
+                        {{ form_widget(themeForm.isActive) }}
                     </div>
                 </div>
                 <div class="mt-10">
