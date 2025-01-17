@@ -33,9 +33,14 @@ class SynthesisController extends AbstractController
         ]);
     }
 
-    #[Route('/synthesis/create', name: 'app_synthesis_create', methods: ['POST'])]
-    public function postSynthesis(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
+    #[Route('/synthesis/create/{themeId}', name: 'app_synthesis_create', methods: ['POST'])]
+    public function postSynthesis(Request $request, EntityManagerInterface $entityManager, int $themeId): Response
     {
+        $theme = $entityManager->getRepository(Theme::class)->find($themeId);
+
+        if (!$theme) {
+            throw $this->createNotFoundException('Theme not found.');
+        }
         $synthesis = new Synthesis();
         $form = $this->createForm(SynthesisCreateFormType::class, $synthesis);
         $form->handleRequest($request);
@@ -63,10 +68,9 @@ class SynthesisController extends AbstractController
         ]);
     }
 
-    #[Route('/synthesis/update/{id}', name: 'app_synthesis_update', methods: ['PUT'])]
-    public function patchSynthesis(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
+    #[Route('/synthesis/update/{id}', name: 'app_synthesis_update', methods: ['PUT', 'POST'])]
+    public function putSynthesis(Request $request, EntityManagerInterface $entityManager, Synthesis $synthesis): Response
     {
-        $synthesis = new Synthesis();
         $form = $this->createForm(SynthesisUpdateFormType::class, $synthesis);
         $form->handleRequest($request);
 
@@ -78,34 +82,28 @@ class SynthesisController extends AbstractController
             }
 
             $synthesis->setUser($user);
-            $synthesis->setTheme($theme);
-
-            $entityManager->persist($synthesis);
             $entityManager->flush();
 
             $this->addFlash('success', 'La synthèse a été mise à jour avec succès.');
 
-            return $this->redirectToRoute('synthesis', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('synthesis_detail', ['id' => $synthesis->getId()]);
         }
 
         return $this->render('synthesis/updateSynthesis.html.twig', [
             'synthesisForm' => $form,
         ]);
-    }    #[Route('/synthesis/delete/{id}', name: 'app_synthesis_delete', methods: ['DELETE'])]
+    }
+
+    #[Route('/synthesis/delete/{id}', name: 'app_synthesis_delete', methods: ['DELETE'])]
     public function deleteSynthesis(Request $request, EntityManagerInterface $entityManager, Synthesis $synthesis): Response
     {
         $submittedToken = $request->request->get('_token');
-
-        if (!$this->isCsrfTokenValid('delete' . $synthesis->getId(), $submittedToken)) {
-            $this->addFlash('error', 'Token CSRF invalide.');
-            return $this->redirectToRoute('app_synthesis_update');
-        }
 
         $entityManager->remove($synthesis);
         $entityManager->flush();
 
         $this->addFlash('success', 'La synthèse a été supprimée avec succès.');
 
-        return $this->redirectToRoute('synthesis');
+        return $this->redirectToRoute('synthesis_list');
     }
 }

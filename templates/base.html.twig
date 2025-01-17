@@ -32,7 +32,7 @@
                 <div class="flex justify-center space-x-6">
                     {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('daily-theme') }}" class="font-merriweather-sans hover:text-gray-300">Theme</a>
-                        <a href="{{ path('app_theme_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Theme</a>
+                        <a href="{{ path('theme_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Theme</a>
                         <a href="{{ path('app_synthesis_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Synthese</a>
                     {% endif %}
                     {% if app.user %}
@@ -47,8 +47,14 @@
                 </div>
             </div>
         </nav>
-
     </div>
+    {% for label, messages in app.flashes %}
+        <div class="alert alert-{{ label }}">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endfor %}
 </header>
 <section>
     <img src="{{ asset('build/images/banner.webp') }}" alt="banniere" class="h-[290px] object-cover w-full">

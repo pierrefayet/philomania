@@ -6,9 +6,9 @@
     <div class="bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
             <h2 class="text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Login</h2>
-            <p class="mt-2 text-lg/8 text-gray-600">Veuillez rentrer vos identifiants pour vous connectez.</p>
+            <p class="mt-2 text-lg/8 text-gray-600">Veuillez rentrer vos identifiants pour vous connecter.</p>
         </div>
-        <form action="{{ path('app_login') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
+        <form action="{{ path('api_login') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
             {{ form_start(form) }}
             <div class="my-custom-class-for-errors">
                 {{ form_errors(form) }}

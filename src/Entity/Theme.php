@@ -6,6 +6,7 @@ use App\Repository\ThemeRepository;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ThemeRepository::class)]
 class Theme
@@ -21,7 +22,7 @@ class Theme
     #[ORM\Column(type: 'text' , nullable: true)]
     private ?string $content = null;
 
-    #[ORM\OneToOne(targetEntity: Synthesis::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Synthesis::class, inversedBy: 'theme', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Synthesis $synthesis = null;
 

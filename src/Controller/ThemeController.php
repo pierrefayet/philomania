@@ -14,29 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ThemeController extends AbstractController
 {
-    #[Route('/theme', name: 'theme_list', methods: ['GET'])]
-    public function cgetTheme(EntityManagerInterface $entityManager): array
-    {
-        return $entityManager->getRepository(Theme::class)->findAll();
-    }
-
-    #[Route('/theme/{id}', name: 'theme_detail', methods: ['GET'])]
-    public function getTheme(Theme $theme): Theme
-    {
-        return $theme;
-    }
-
-    #[Route('/daily-theme/', name: 'daily-theme', methods: ['GET'])]
-    public function dailyTheme(EntityManagerInterface $entityManager): Response
-    {
-        $theme = $entityManager->getRepository(Theme::class)->findOneBy(['isActive' => true]);
-
-        return $this->render('/theme/daily_theme.html.twig', [
-            'theme' => $theme,
-        ]);
-    }
-
-    #[Route('/theme/create', name: 'app_theme_create', methods: ['GET', 'POST'])]
+    #[Route('/theme/create', name: 'theme_create', methods: ['GET', 'POST'])]
     public function postTheme(Request $request, EntityManagerInterface $entityManager): Response
     {
         $theme = new Theme();
@@ -57,18 +35,48 @@ class ThemeController extends AbstractController
 
             $this->addFlash('success', 'Le thème a été créé avec succès.');
 
-            return $this->redirectToRoute('theme', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('theme_list', ['id' => $theme->getId()]);
         }
 
         return $this->render('theme/postTheme.html.twig', [
-            'themeUpdateForm' => $form->createView(),
+            'themeForm' => $form->createView(),
         ]);
     }
 
-    #[Route('/theme/update/{id}', name: 'app_theme_update', methods: ['PATCH'])]
-    public function patchTheme(Request $request, EntityManagerInterface $entityManager, $themeId): Response
+    #[Route('/theme/{id}', name: 'theme_list', methods: ['GET'])]
+    public function cgetTheme(EntityManagerInterface $entityManager): Response
     {
-        $theme = $entityManager->getRepository(Theme::class)->find($themeId);
+        $themes = $entityManager->getRepository(Theme::class)->findAll();
+
+        return $this->render('theme/themeList.html.twig', [
+            'themes' => $themes,
+        ]);
+    }
+
+    #[Route('/theme/{id}', name: 'theme_detail', methods: ['GET'])]
+    public function getTheme(EntityManagerInterface $entityManager, $id): Response
+    {
+        $theme = $entityManager->getRepository(Theme::class)->find($id);
+
+        return $this->render('theme/themeDetail.html.twig', [
+            'theme' => $theme,
+        ]);
+    }
+
+    #[Route('/daily-theme/', name: 'daily-theme', methods: ['GET'])]
+    public function dailyTheme(EntityManagerInterface $entityManager): Response
+    {
+        $theme = $entityManager->getRepository(Theme::class)->findOneBy(['isActive' => true]);
+
+        return $this->render('/theme/dailyTheme.html.twig', [
+            'theme' => $theme,
+        ]);
+    }
+
+    #[Route('/theme/update/{id}', name: 'app_theme_update', methods: ['POST', 'PATCH'])]
+    public function patchTheme(Request $request, EntityManagerInterface $entityManager, $id): Response
+    {
+        $theme = $entityManager->getRepository(Theme::class)->find($id);
 
         if (!$theme) {
             $this->addFlash('error', 'Thème introuvable.');
@@ -84,7 +92,7 @@ class ThemeController extends AbstractController
 
             $this->addFlash('success', 'Le thème a été mis à jour avec succès.');
 
-            return $this->redirectToRoute('theme', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('daily-theme', ['id' => $theme->getId()]);
         }
 
         return $this->render('theme/updateTheme.html.twig', [
@@ -97,16 +105,11 @@ class ThemeController extends AbstractController
     {
         $submittedToken = $request->request->get('_token');
 
-        if (!$this->isCsrfTokenValid('delete' . $theme->getId(), $submittedToken)) {
-            $this->addFlash('error', 'Token CSRF invalide.');
-            return $this->redirectToRoute('app_theme_update');
-        }
-
         $entityManager->remove($theme);
         $entityManager->flush();
 
         $this->addFlash('success', 'Le thème a été supprimé avec succès.');
 
-        return $this->redirectToRoute('themes');
+        return $this->redirectToRoute('theme_list');
     }
 }

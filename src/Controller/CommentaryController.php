@@ -6,7 +6,6 @@ use App\Entity\Commentary;
 use App\Entity\Theme;
 use App\Entity\User;
 use App\Form\CommentaryFormType;
-use App\Form\ConnexionFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,9 +32,15 @@ class CommentaryController extends AbstractController
         ]);
     }
 
-    #[Route('/commentary/create', name: 'app_commentary', methods: ['POST'])]
-    public function postCommentary(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
+    #[Route('/commentary/create/{themeId}', name: 'app_commentary_create', methods: ['POST', 'GET'])]
+    public function postCommentary(Request $request, EntityManagerInterface $entityManager, int $themeId): Response
     {
+        $theme = $entityManager->getRepository(Theme::class)->find($themeId);
+
+        if (!$theme) {
+            throw $this->createNotFoundException('Theme not found.');
+        }
+
         $commentary = new Commentary();
         $form = $this->createForm(CommentaryFormType::class, $commentary);
         $form->handleRequest($request);
@@ -47,7 +52,7 @@ class CommentaryController extends AbstractController
                 throw new \LogicException('Expected instance of App\Entity\User. Got ' . get_debug_type($user));
             }
 
-            $commentary->setUserId($user->getId());
+            $commentary->setUser($user);
             $commentary->setTheme($theme);
 
             $entityManager->persist($commentary);
@@ -58,8 +63,8 @@ class CommentaryController extends AbstractController
             return $this->redirectToRoute('theme', ['id' => $theme->getId()]);
         }
 
-        return $this->render('synthesis/synthesis.html.twig', [
-            'synthesisForm' => $form,
+        return $this->render('commentary/postCommentary.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -67,7 +72,7 @@ class CommentaryController extends AbstractController
     public function updateCommentary(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
     {
         $commentary = new Commentary();
-        $form = $this->createForm(ConnexionFormType::class, $commentary);
+        $form = $this->createForm(CommentaryFormType::class, $commentary);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,40 +99,26 @@ class CommentaryController extends AbstractController
     }
 
     #[Route('/commentary/delete/{id}', name: 'app_commentary_delete', methods: ['DELETE'])]
-    public function deleteCommentary(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
+    public function deleteCommentary(Request $request, EntityManagerInterface $entityManager, Commentary $commentary): Response
     {
-            $submittedToken = $request->request->get('_token');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-            if (!$this->isCsrfTokenValid('delete' . $theme->getId(), $submittedToken)) {
-                $this->addFlash('error', 'Token CSRF invalide.');
-                return $this->redirectToRoute('app_theme_update');
-            }
+        if ($this->getUser() !== $commentary->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas supprimer ce commentaire.');
+        }
 
-            $entityManager->remove($theme);
-            $entityManager->flush();
+        $submittedToken = $request->request->get('_token');
 
-            $this->addFlash('success', 'Le commentaire  a été supprimé avec succès.');
-
-            return $this->redirectToRoute('theme');
-    }
-
-    #[Route('/commentary/delete', name: 'app_commentary_delete_all', methods: ['DELETE'])]
-    public function deleteCommentaries(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
-    {
-        {
-            $submittedToken = $request->request->get('_token');
-
-            if (!$this->isCsrfTokenValid('delete' . $theme->getId(), $submittedToken)) {
-                $this->addFlash('error', 'Token CSRF invalide.');
-                return $this->redirectToRoute('app_theme_update');
-            }
-
-            $entityManager->remove($theme);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Les commentaires ont été supprimés avec succès.');
-
+        if (!$this->isCsrfTokenValid('delete' . $commentary->getId(), $submittedToken)) {
+            $this->addFlash('error', 'Token CSRF invalide.');
             return $this->redirectToRoute('theme');
         }
+
+        $entityManager->remove($commentary);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le commentaire a été supprimé avec succès.');
+
+        return $this->redirectToRoute('theme');
     }
 }
