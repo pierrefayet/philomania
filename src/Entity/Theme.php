@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ThemeRepository::class)]
+#[ORM\Table(name: 'theme', uniqueConstraints: [
+    new ORM\UniqueConstraint(name: 'unique_active_theme', columns: ['is_active'])
+])]
 class Theme
 {
     #[ORM\Id]

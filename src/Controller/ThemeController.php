@@ -67,17 +67,24 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    #[Route('/daily-theme/{themeId}', name: 'daily-theme', methods: ['GET'])]
+    #[Route('/daily-theme', name: 'daily-theme', methods: ['GET'])]
     public function dailyTheme(EntityManagerInterface $entityManager): Response
     {
-        $theme = $entityManager->getRepository(Theme::class)->findOneBy(['isActive' => true]);
+        $theme = $entityManager->getRepository(Theme::class)->findOneBy([
+            'isActive' => true
+        ]);
+
+        if (!$theme) {
+            $this->addFlash('error', 'Aucun thème actif trouvé.');
+            return $this->redirectToRoute('theme_list');
+        }
 
         return $this->render('/theme/dailyTheme.html.twig', [
             'theme' => $theme,
         ]);
     }
 
-    #[Route('/theme/update/{id}', name: 'app_theme_update', methods: ['POST', 'PATCH'])]
+    #[Route('/theme/update/{id}', name: 'app_theme_update', methods: ['GET', 'POST', 'PATCH'])]
     public function patchTheme(Request $request, EntityManagerInterface $entityManager, $id): Response
     {
         $theme = $entityManager->getRepository(Theme::class)->find($id);
@@ -96,7 +103,7 @@ class ThemeController extends AbstractController
 
             $this->addFlash('success', 'Le thème a été mis à jour avec succès.');
 
-            return $this->redirectToRoute('daily-theme', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('theme_list', ['id' => $theme->getId()]);
         }
 
         return $this->render('theme/updateTheme.html.twig', [
@@ -104,7 +111,7 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    #[Route('/theme/delete/{id}', name: 'app_theme_delete', methods: ['DELETE'])]
+    #[Route('/theme/delete/{id}', name: 'app_theme_delete', methods: ['POST', 'DELETE'])]
     public function deleteTheme(Request $request, EntityManagerInterface $entityManager, Theme $theme): Response
     {
         $submittedToken = $request->request->get('_token');

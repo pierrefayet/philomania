@@ -8,17 +8,15 @@ use Twig\Extension\GlobalsInterface;
 
 class GlobalThemesExtension extends AbstractExtension implements GlobalsInterface
 {
-    private ThemeRepository $themeRepository;
-
-    public function __construct(ThemeRepository $themeRepository)
+    public function __construct(readonly ThemeRepository $themeRepository)
     {
-        $themes = $this->themeRepository = $themeRepository;
     }
 
     public function getGlobals(): array
     {
+        $activeTheme = $this->themeRepository->findOneBy(['isActive' => true]);
         return [
-            'themes' => $this->themeRepository->findAll()
+            'theme' => $activeTheme ?? null,
         ];
     }
 }

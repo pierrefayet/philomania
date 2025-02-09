@@ -63,7 +63,6 @@ class SecurityController extends AbstractController
             );
         }
 
-// ⛔ Erreur si le formulaire n'est pas valide ou pas soumis
         return $this->render('security/login.html.twig', [
             'form' => $form->createView(),
         ]);

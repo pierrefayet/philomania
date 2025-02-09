@@ -51,5 +51,7 @@ class SynthesisCreateFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Synthesis::class
         ]);
+
+        $resolver->setDefined('themes');
     }
 }

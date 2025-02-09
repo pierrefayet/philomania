@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails du Thème{% endblock %}
+{% block title %}Détails de la synthese{% endblock %}
 
 {% block body %}
     <main class="flex justify-center bg-white shadow-lg h-[800px]">
@@ -9,7 +9,7 @@
             <!-- Détails du Thème -->
             <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
                 <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
-                    DÉTAILS DU THÈME: {{ synthesis.title }}
+                    DÉTAILS De la synthese: {{ synthesis.title }}
                 </h3>
 
                 <div class="mx-auto">
@@ -24,12 +24,12 @@
                 <h3 class="font-merriweather-sans text-center text-xl font-semibold text-blue-700 mb-4">
                     ACTIONS
                 </h3>
-                <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
-                    <a href="{{ path('app_theme_update', {id: synthesis.id}) }}"
-                       class="px-4 py-2 rounded-md bg-indigo-600 text-white text-center hover:bg-indigo-500">
+                <div class="flex justify-center space-x-4">
+                    <a href="{{ path('app_synthesis_update', {id: synthesis.id}) }}"
+                       class="inline-flex px-4 py-2 rounded-md bg-indigo-600 text-white text-center hover:bg-indigo-500">
                         Modifier
                     </a>
-                    <form action="{{ path('app_theme_delete', {id: synthesis.id}) }}" method="post" class="flex justify-center">
+                    <form action="{{ path('app_synthesis_delete', {id: synthesis.id}) }}" method="post">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ synthesis.id) }}">
                         <button type="submit" class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-500">
                             Supprimer

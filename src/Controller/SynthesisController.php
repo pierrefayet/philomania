@@ -15,32 +15,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class SynthesisController extends AbstractController
 {
-    #[Route('/synthesis', name: 'synthesis_list', methods: ['GET'])]
-    public function cgetSynthesis(EntityManagerInterface $entityManager): Response
-    {
-        $synthesis = $entityManager->getRepository(Synthesis::class)->findAll();
-
-        return $this->render('/synthesis.html.twig', [
-            'synthesis' => $synthesis
-        ]);
-    }
-
-    #[Route('/synthesis/{id}', name: 'synthesis_detail', methods: ['GET'])]
-    public function getSynthesis(Synthesis $synthesis): Response
-    {
-        return $this->render('/synthesis.html.twig', [
-            'synthesis' => $synthesis,
-        ]);
-    }
-
-    #[Route('/synthesis/create', name: 'app_synthesis_create', methods: ['GET'])]
+    #[Route('/synthesis/create', name: 'app_synthesis_create', methods: ['GET', 'POST'])]
     public function postSynthesis(Request $request, EntityManagerInterface $entityManager): Response
     {
-
         $themes = $entityManager->getRepository(Theme::class)->findAll();
 
         if (!$themes) {
-            return $this->render('synthesis/synthesis.html.twig', [
+            return $this->render('theme/themeList.html.twig', [
                 'error' => 'Aucun thème trouvé. Veuillez d\'abord en créer un avant de faire une synthèse.'
             ]);
         }
@@ -72,25 +53,36 @@ class SynthesisController extends AbstractController
 
             $this->addFlash('success', 'La synthèse a été créée avec succès.');
 
-            return $this->redirectToRoute('theme', ['id' => $theme->getId()]);
-        }
-
-        return $this->render('synthesis/synthesis.html.twig', [
-            'synthesisForm' => $form->createView(),
-        ]);
-    }
-
-    #[Route('/synthesis/update/{id}', name: 'app_synthesis_update', methods: ['PUT', 'POST'])]
-    public function putSynthesis(Request $request, EntityManagerInterface $entityManager, int $id): Response
-    {
-        $themes = $entityManager->getRepository(Theme::class)->findAll();
-
-        if (!$themes) {
-            $this->addFlash('warning', 'Aucune synthèse trouvée. Veuillez en créer une avant d’y accéder.');
             return $this->redirectToRoute('synthesis_list');
         }
 
-        $form = $this->createForm(SynthesisUpdateFormType::class, $themes);
+        return $this->render('synthesis/postSynthesis.html.twig', [
+            'synthesisCreateForm' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/synthesis', name: 'synthesis_list', methods: ['GET'])]
+    public function cgetSynthesis(EntityManagerInterface $entityManager): Response
+    {
+        $synthesis = $entityManager->getRepository(Synthesis::class)->findAll();
+
+        return $this->render('/synthesis/synthesisList.html.twig', [
+            'synthesis' => $synthesis
+        ]);
+    }
+
+    #[Route('/synthesis/{id}', name: 'synthesis_detail', methods: ['GET'])]
+    public function getSynthesis(Synthesis $synthesis): Response
+    {
+        return $this->render('/synthesis/synthesisDetail.html.twig', [
+            'synthesis' => $synthesis,
+        ]);
+    }
+
+    #[Route('/synthesis/update/{id}', name: 'app_synthesis_update', methods: ['GET', 'PUT', 'POST'])]
+    public function putSynthesis(Request $request, EntityManagerInterface $entityManager, Synthesis $synthesis): Response
+    {
+        $form = $this->createForm(SynthesisUpdateFormType::class, $synthesis);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -109,12 +101,12 @@ class SynthesisController extends AbstractController
         }
 
         return $this->render('synthesis/updateSynthesis.html.twig', [
-            'synthesisForm' => $form,
+            'synthesisUpdateForm' => $form,
         ]);
     }
 
-    #[Route('/synthesis/delete/{id}', name: 'app_synthesis_delete', methods: ['DELETE'])]
-    public function deleteSynthesis(Request $request, EntityManagerInterface $entityManager, int $id): Response
+    #[Route('/synthesis/delete/{id}', name: 'app_synthesis_delete', methods: ['POST', 'DELETE'])]
+    public function deleteSynthesis(EntityManagerInterface $entityManager, int $id): Response
     {
         $synthesis = $entityManager->getRepository(Synthesis::class)->find($id);
 

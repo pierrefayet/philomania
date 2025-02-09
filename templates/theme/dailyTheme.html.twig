@@ -14,7 +14,7 @@
                 </h3>
 
                 <div class="mx-auto">
-                    {% if theme %}
+                    {% if theme is defined and theme is not null %}
                         <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base mt-4">
                             {{ theme.content }}
                         </p>

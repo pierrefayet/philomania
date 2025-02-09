@@ -54,18 +54,18 @@ security:
          - { path: ^/about, roles: PUBLIC_ACCESS  }
          - { path: ^/sign_in, roles: PUBLIC_ACCESS  }
          - { path: ^/chart, roles: PUBLIC_ACCESS }
-         - { path: ^/theme/create, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/theme/update, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/theme/delete, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/theme/create, roles: ROLE_ADMIN }
+         - { path: ^/theme/update, roles: ROLE_ADMIN }
+         - { path: ^/theme/delete, roles: ROLE_ADMIN }
          - { path: ^/theme, roles: PUBLIC_ACCESS }
          - { path: ^/daily-theme, roles: PUBLIC_ACCESS }
-         - { path: ^/synthesis/create, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/synthesis/update, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/synthesis/delete, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/synthesis/create, roles: ROLE_ADMIN }
+         - { path: ^/synthesis/update, roles: ROLE_ADMIN }
+         - { path: ^/synthesis/delete, roles: ROLE_ADMIN }
          - { path: ^/synthesis, roles: PUBLIC_ACCESS }
-         - { path: ^/commentary/create, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/commentary/update, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/commentary/delete, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/commentary/create, roles: ROLE_ADMIN}
+         - { path: ^/commentary/update, roles: ROLE_ADMIN }
+         - { path: ^/commentary/delete, roles: ROLE_ADMIN }
          - { path: ^/commentaries, roles: PUBLIC_ACCESS }
          - { path: ^/commentary, roles: PUBLIC_ACCESS }
 
