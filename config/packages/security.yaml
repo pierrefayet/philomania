@@ -18,18 +18,18 @@ security:
           stateless: true
           provider: app_user_provider
           jwt: ~
+          refresh_jwt:
+            check_path: /api/token/refresh
+          entry_point: jwt
         main:
-            lazy: true
-            provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                username_parameter: connexion_form[email]
-                password_parameter: connexion_form[password]
-                enable_csrf: true
-            logout:
-                path: app_logout
-                target: app_login
+          pattern: ^/
+          stateless: false
+          provider: app_user_provider
+          jwt: ~
+          entry_point: jwt
+          logout:
+            path: app_logout
+            target: app_login
 
                 # where to redirect after logout
                 # target: app_any_route
@@ -44,6 +44,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/api/login, roles: PUBLIC_ACCESS }
+         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
          - { path: ^/api, roles: PUBLIC_ACCESS }
          - { path: ^/_wdt, roles: PUBLIC_ACCESS }
          - { path: ^/form, roles: ROLE_USER }

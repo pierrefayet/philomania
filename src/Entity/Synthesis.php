@@ -35,7 +35,8 @@ class Synthesis
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToOne(targetEntity: Theme::class, mappedBy: 'synthesis', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Theme::class, inversedBy: 'syntheses')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
 
 

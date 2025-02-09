@@ -11,50 +11,66 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
               rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {% endblock %}
 </head>
 <body class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 ">
-<header class="bg-opa city-20">
-    <div class="flex justify-between m-8">
-        <div class="text-center">
-            <h1 class="font-merriweather-sans text-4xl font-bold text-white">Philomanie</h1>
-        </div>
+<header class="bg-blue-500 relative h-[100px] z-10">
+    <div class="flex justify-between items-center px-8 py-4 h-full overflow-visible mx-4">
+        <h1 class="font-merriweather-sans text-4xl font-bold text-white mt-2">Philomanie</h1>
+
         {% if app.user %}
-            <span class="font-merriweather-sans text-gray-200">Bienvenue, {{ app.user.email }}</span>
+            <span class="font-merriweather-sans text-gray-200 mt-2">Bienvenue, {{ app.user.email }}</span>
         {% endif %}
-        <nav>
-            <div class="flex flex-col space-y-4 font-medium text-xl text-white" id="navbar">
-                <div class="flex justify-center space-x-6">
-                    <a href="{{ path('homepage') }}" class="font-merriweather-sans hover:text-gray-300">Accueil</a>
-                    <a href="{{ path('about') }}" class="font-merriweather-sans hover:text-gray-300">Qui suis-je ?</a>
-                    <a href="{{ path('contact') }}" class="font-merriweather-sans hover:text-gray-300">Contact</a>
-                </div>
-                <div class="flex justify-center space-x-6">
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('daily-theme') }}" class="font-merriweather-sans hover:text-gray-300">Theme</a>
-                        <a href="{{ path('theme_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Theme</a>
-                        <a href="{{ path('app_synthesis_create') }}" class="font-merriweather-sans hover:text-gray-300">Form-Synthese</a>
+
+        <nav class="flex space-x-6 text-white">
+            <a href="{{ path('homepage') }}" class="hover:text-gray-300">Accueil</a>
+            <a href="{{ path('about') }}" class="hover:text-gray-300">Qui suis-je ?</a>
+            <a href="{{ path('contact') }}" class="hover:text-gray-300">Contact</a>
+
+            <!-- Dropdown Thème avec clic -->
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="hover:text-gray-300 flex items-center">
+                    Thème <span class="ml-2 transform" :class="open ? 'rotate-180' : ''">▼</span>
+                </button>
+                <div x-show="open" @click.away="open = false"
+                     class="absolute left-0 top-full w-48 bg-blue-600 shadow-lg rounded-md z-50">
+                    {% if theme is defined and theme is not null %}
+                        <a href="{{ path('daily-theme', { 'themeId': theme.id }) }}" class="block px-4 py-2 hover:bg-blue-700">
+                            Thème du jour
+                        </a>
                     {% endif %}
-                    {% if app.user %}
-                        <a href="{{ path('app_logout') }}"
-                           class="font-merriweather-sans hover:text-gray-300">Déconnexion</a>
+                    <a href="{{ path('theme_list') }}" class="block px-4 py-2 hover:bg-blue-700">Theme List</a>
+                    <a href="{{ path('theme_create') }}" class="block px-4 py-2 hover:bg-blue-700">Créer un Thème</a>
+                </div>
+            </div>
+
+            <!-- Dropdown Synthèse avec clic -->
+            <!-- Dropdown Thème avec clic -->
+            <div x-data="{ open: false }" class="relative">
+                <div x-data="{ open: false }" class="relative">
+                    {% if themes is defined and themes|length > 0 %}
+                    <button @click="open = !open" class="hover:text-gray-300 flex items-center">
+                        Synthese <span class="ml-2 transform" :class="open ? 'rotate-180' : ''">▼</span>
+                    </button>
+                    <div x-show="open" @click.away="open = false"
+                         class="absolute left-0 top-full mt-2 w-48 bg-blue-600 shadow-lg rounded-md z-50">
+                        <a href="{{ path('app_synthesis_create') }}" class="block px-4 py-2 hover:bg-blue-700">Création</a>
+                    </div>
                     {% else %}
-                        <a href="{{ path('app_login') }}"
-                           class="font-merriweather-sans hover:text-gray-300">Connexion</a>
-                        <a href="{{ path('app_register') }}" class="font-merriweather-sans hover:text-gray-300">Créer un
-                            compte</a>
+                        <p class="text-red-600">Aucun thème trouvé.</p>
                     {% endif %}
                 </div>
             </div>
+
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}" class="hover:text-gray-300">Déconnexion</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="hover:text-gray-300">Connexion</a>
+                <a href="{{ path('app_register') }}" class="hover:text-gray-300">Créer un compte</a>
+            {% endif %}
         </nav>
     </div>
-    {% for label, messages in app.flashes %}
-        <div class="alert alert-{{ label }}">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    {% endfor %}
 </header>
 <section>
     <img src="{{ asset('build/images/banner.webp') }}" alt="banniere" class="h-[290px] object-cover w-full">

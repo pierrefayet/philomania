@@ -18,12 +18,20 @@
                 {{ form_start(synthesisCreateForm) }}
                 <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                     <div class="sm:col-span-2">
-                        {{ form_label(synthesisCreateForm.title) }}
-                        {{ form_widget(synthesisCreateForm.title) }}
+                        <label for="theme" class="block text-sm font-semibold leading-6 text-gray-900">Sélectionnez un Thème</label>
+                        <div class="sm:col-span-2">
+                            {{ form_label(synthesisForm.theme) }}
+                            {{ form_widget(synthesisForm.theme) }}
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        {{ form_label(synthesisForm.title) }}
+                        {{ form_widget(synthesisForm.title) }}
                     </div>
                     <div class="sm:col-span-2">
-                        {{ form_label(synthesisCreateForm.content) }}
-                        {{ form_widget(synthesisCreateForm.content) }}
+                        {{ form_label(synthesisForm.content) }}
+                        {{ form_widget(synthesisForm.content) }}
                     </div>
                 </div>
                 <div class="mt-10">

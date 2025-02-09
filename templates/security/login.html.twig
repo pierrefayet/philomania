@@ -8,7 +8,7 @@
             <h2 class="text-balance text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Login</h2>
             <p class="mt-2 text-lg/8 text-gray-600">Veuillez rentrer vos identifiants pour vous connecter.</p>
         </div>
-        <form action="{{ path('api_login') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
+        <form action="{{ path('app_login') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
             {{ form_start(form) }}
             <div class="my-custom-class-for-errors">
                 {{ form_errors(form) }}

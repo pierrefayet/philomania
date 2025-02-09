@@ -11,6 +11,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * Please run php bin/console app:create-admin --email="user" --password="123456789" for create admin user
+ */
+
 class CreateAdminCommand extends Command
 {
     protected static $defaultName = 'app:create-admin';

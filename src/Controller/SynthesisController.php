@@ -33,16 +33,23 @@ class SynthesisController extends AbstractController
         ]);
     }
 
-    #[Route('/synthesis/create/{themeId}', name: 'app_synthesis_create', methods: ['POST'])]
-    public function postSynthesis(Request $request, EntityManagerInterface $entityManager, int $themeId): Response
+    #[Route('/synthesis/create', name: 'app_synthesis_create', methods: ['GET'])]
+    public function postSynthesis(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $theme = $entityManager->getRepository(Theme::class)->find($themeId);
 
-        if (!$theme) {
-            throw $this->createNotFoundException('Theme not found.');
+        $themes = $entityManager->getRepository(Theme::class)->findAll();
+
+        if (!$themes) {
+            return $this->render('synthesis/synthesis.html.twig', [
+                'error' => 'Aucun thème trouvé. Veuillez d\'abord en créer un avant de faire une synthèse.'
+            ]);
         }
+
         $synthesis = new Synthesis();
-        $form = $this->createForm(SynthesisCreateFormType::class, $synthesis);
+        $form = $this->createForm(SynthesisCreateFormType::class, $synthesis, [
+            "themes" => $themes
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,6 +57,11 @@ class SynthesisController extends AbstractController
 
             if (!$user instanceof User) {
                 throw new \LogicException('Expected instance of App\Entity\User. Got ' . get_debug_type($user));
+            }
+
+            $theme = $synthesis->getTheme();
+            if (!$theme) {
+                throw new \LogicException('Un thème doit être sélectionné.');
             }
 
             $synthesis->setUser($user);
@@ -64,14 +76,21 @@ class SynthesisController extends AbstractController
         }
 
         return $this->render('synthesis/synthesis.html.twig', [
-            'synthesisForm' => $form,
+            'synthesisForm' => $form->createView(),
         ]);
     }
 
     #[Route('/synthesis/update/{id}', name: 'app_synthesis_update', methods: ['PUT', 'POST'])]
-    public function putSynthesis(Request $request, EntityManagerInterface $entityManager, Synthesis $synthesis): Response
+    public function putSynthesis(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
-        $form = $this->createForm(SynthesisUpdateFormType::class, $synthesis);
+        $themes = $entityManager->getRepository(Theme::class)->findAll();
+
+        if (!$themes) {
+            $this->addFlash('warning', 'Aucune synthèse trouvée. Veuillez en créer une avant d’y accéder.');
+            return $this->redirectToRoute('synthesis_list');
+        }
+
+        $form = $this->createForm(SynthesisUpdateFormType::class, $themes);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -95,9 +114,13 @@ class SynthesisController extends AbstractController
     }
 
     #[Route('/synthesis/delete/{id}', name: 'app_synthesis_delete', methods: ['DELETE'])]
-    public function deleteSynthesis(Request $request, EntityManagerInterface $entityManager, Synthesis $synthesis): Response
+    public function deleteSynthesis(Request $request, EntityManagerInterface $entityManager, int $id): Response
     {
-        $submittedToken = $request->request->get('_token');
+        $synthesis = $entityManager->getRepository(Synthesis::class)->find($id);
+
+        if (!$synthesis) {
+            throw $this->createNotFoundException('Synthèse non trouvée.');
+        }
 
         $entityManager->remove($synthesis);
         $entityManager->flush();

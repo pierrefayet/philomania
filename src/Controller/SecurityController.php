@@ -4,13 +4,18 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ConnexionFormType;
+use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class SecurityController extends AbstractController
 {
@@ -18,7 +23,10 @@ class SecurityController extends AbstractController
     public function loginForm(
         Request                     $request,
         EntityManagerInterface      $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        UserAuthenticatorInterface  $userAuthenticator,
+        LoginFormAuthenticator $authenticator,
+        RefreshTokenManagerInterface $refreshTokenManager
     ): Response
     {
         $form = $this->createForm(ConnexionFormType::class);
@@ -30,12 +38,7 @@ class SecurityController extends AbstractController
 
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
-            if (!$passwordHasher->isPasswordValid($user, $plainPassword)) {
-                $this->addFlash('error', 'Invalid credentials.');
-                return $this->redirectToRoute('app_login');
-            }
-
-            if (!$user) {
+            if (!$user || !$passwordHasher->isPasswordValid($user, $plainPassword)) {
                 $this->addFlash('error', 'Invalid credentials.');
                 return $this->redirectToRoute('app_login');
             }
@@ -45,12 +48,22 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
 
-            $this->addFlash('success', 'You are successfully logged in.');
+            // ✅ Création du refresh token dans le bon bloc
+            $refreshToken = $refreshTokenManager->create();
+            $refreshToken->setRefreshToken(bin2hex(random_bytes(40))); // Génère un token aléatoire
+            $refreshToken->setUsername($user->getUserIdentifier()); // Associe l'utilisateur
+            $refreshToken->setValid((new \DateTime())->modify('+7 days'));
+            $entityManager->persist($refreshToken);
+            $entityManager->flush();
 
-            // Redirection vers la page d'accueil
-            return $this->redirectToRoute('homepage');
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request,
+            );
         }
 
+// ⛔ Erreur si le formulaire n'est pas valide ou pas soumis
         return $this->render('security/login.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -64,7 +77,7 @@ class SecurityController extends AbstractController
         JWTTokenManagerInterface    $jwtManager
     ): Response
     {
-        $formData = $request->request->all('connexion_form');
+        $formData = json_decode($request->getContent(), true);
         $email = $formData['email'] ?? null;
         $plainPassword = $formData['password'] ?? null;
 
@@ -87,14 +100,25 @@ class SecurityController extends AbstractController
         }
 
         $token = $jwtManager->create($user);
+        $cookie = Cookie::create('BEARER')
+            ->withValue($token)
+            ->withExpires(time() + 3600)
+            ->withSecure($_ENV['APP_ENV'] !== 'dev')
+            ->withHttpOnly(true)
+            ->withSameSite('Lax');
 
-        return $this->json(['token' => $token], Response::HTTP_OK);
+        $response = new JsonResponse(['token' => $token], Response::HTTP_OK);
+        $response->headers->setCookie($cookie);
+
+        return $response;
     }
 
-
-    #[
-        Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    #[Route(path: '/logout', name: 'app_logout')]
+    public function logout(Request $request): void
     {
+        $response = new Response();
+        $response->headers->clearCookie('BEARER');
+        $request->getSession()->invalidate();
+        $response->headers->set('Location', '/login');
     }
 }

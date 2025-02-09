@@ -35,7 +35,7 @@ class ThemeController extends AbstractController
 
             $this->addFlash('success', 'Le thème a été créé avec succès.');
 
-            return $this->redirectToRoute('theme_list', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('theme_list');
         }
 
         return $this->render('theme/postTheme.html.twig', [
@@ -43,8 +43,8 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    #[Route('/theme/{id}', name: 'theme_list', methods: ['GET'])]
-    public function cgetTheme(EntityManagerInterface $entityManager): Response
+    #[Route('/theme', name: 'theme_list', methods: ['GET'])]
+    public function cGetTheme(EntityManagerInterface $entityManager): Response
     {
         $themes = $entityManager->getRepository(Theme::class)->findAll();
 
@@ -58,12 +58,16 @@ class ThemeController extends AbstractController
     {
         $theme = $entityManager->getRepository(Theme::class)->find($id);
 
+        if (!$theme) {
+            throw $this->createNotFoundException('Thème introuvable.');
+        }
+
         return $this->render('theme/themeDetail.html.twig', [
             'theme' => $theme,
         ]);
     }
 
-    #[Route('/daily-theme/', name: 'daily-theme', methods: ['GET'])]
+    #[Route('/daily-theme/{themeId}', name: 'daily-theme', methods: ['GET'])]
     public function dailyTheme(EntityManagerInterface $entityManager): Response
     {
         $theme = $entityManager->getRepository(Theme::class)->findOneBy(['isActive' => true]);

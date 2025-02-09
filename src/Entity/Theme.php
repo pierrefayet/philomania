@@ -22,8 +22,7 @@ class Theme
     #[ORM\Column(type: 'text' , nullable: true)]
     private ?string $content = null;
 
-    #[ORM\OneToOne(targetEntity: Synthesis::class, inversedBy: 'theme', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne(targetEntity: Synthesis::class, mappedBy: 'theme', cascade: ['persist', 'remove'])]
     private ?Synthesis $synthesis = null;
 
     #[ORM\Column]
