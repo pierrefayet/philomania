@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Commentary;
 use App\Entity\Theme;
 use App\Entity\User;
+use App\Form\CommentaryFormType;
 use App\Form\ThemePostFormType;
 use App\Form\ThemeUpdateFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,8 +69,8 @@ class ThemeController extends AbstractController
         ]);
     }
 
-    #[Route('/daily-theme', name: 'daily-theme', methods: ['GET'])]
-    public function dailyTheme(EntityManagerInterface $entityManager): Response
+    #[Route('/daily-theme', name: 'daily-theme', methods: ['GET', 'POST'])]
+    public function dailyTheme(Request $request, EntityManagerInterface $entityManager): Response
     {
         $theme = $entityManager->getRepository(Theme::class)->findOneBy([
             'isActive' => true
@@ -79,8 +81,32 @@ class ThemeController extends AbstractController
             return $this->redirectToRoute('theme_list');
         }
 
+        $commentaries = $entityManager->getRepository(Commentary::class)->findByThemeWithUser($theme->getId());
+        
+        $commentary = new Commentary();
+        $form = $this->createForm(CommentaryFormType::class, $commentary);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$this->getUser()) {
+                $this->addFlash('error', 'Vous devez être connecté pour commenter.');
+                return $this->redirectToRoute('daily-theme');
+            }
+
+            $commentary->setUser($this->getUser());
+            $commentary->setTheme($theme);
+            $commentary->setCreatedAt(new \DateTimeImmutable());
+
+            $entityManager->persist($commentary);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('daily-theme');
+        }
+
         return $this->render('/theme/dailyTheme.html.twig', [
             'theme' => $theme,
+            'commentaries' => $commentaries,
+            'form' => $form->createView()
         ]);
     }
 

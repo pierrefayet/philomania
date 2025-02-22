@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\RefreshToken;
 use App\Entity\User;
 use App\Form\ConnexionFormType;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Random\RandomException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,14 +20,17 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class SecurityController extends AbstractController
 {
+    /**
+     * @throws \DateMalformedStringException
+     * @throws RandomException
+     */
     #[Route(path: '/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function loginForm(
         Request                     $request,
         EntityManagerInterface      $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
+        UserPasswordHasherInterface $passwordHashed,
         UserAuthenticatorInterface  $userAuthenticator,
-        LoginFormAuthenticator $authenticator,
-        RefreshTokenManagerInterface $refreshTokenManager
+        LoginFormAuthenticator      $authenticator,
     ): Response
     {
         $form = $this->createForm(ConnexionFormType::class);
@@ -38,7 +42,7 @@ class SecurityController extends AbstractController
 
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
-            if (!$user || !$passwordHasher->isPasswordValid($user, $plainPassword)) {
+            if (!$user || !$passwordHashed->isPasswordValid($user, $plainPassword)) {
                 $this->addFlash('error', 'Invalid credentials.');
                 return $this->redirectToRoute('app_login');
             }
@@ -48,10 +52,9 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
 
-            // ✅ Création du refresh token dans le bon bloc
-            $refreshToken = $refreshTokenManager->create();
-            $refreshToken->setRefreshToken(bin2hex(random_bytes(40))); // Génère un token aléatoire
-            $refreshToken->setUsername($user->getUserIdentifier()); // Associe l'utilisateur
+            $refreshToken = new RefreshToken();
+            $refreshToken->setRefreshToken(bin2hex(random_bytes(40)));
+            $refreshToken->setUsername($user->getUserIdentifier());
             $refreshToken->setValid((new \DateTime())->modify('+7 days'));
             $entityManager->persist($refreshToken);
             $entityManager->flush();
@@ -72,7 +75,7 @@ class SecurityController extends AbstractController
     public function loginWithJwt(
         Request                     $request,
         EntityManagerInterface      $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
+        UserPasswordHasherInterface $passwordHashed,
         JWTTokenManagerInterface    $jwtManager
     ): Response
     {
@@ -90,7 +93,7 @@ class SecurityController extends AbstractController
             return $this->json(['error' => 'Invalid credentials.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (!$passwordHasher->isPasswordValid($user, $plainPassword)) {
+        if (!$passwordHashed->isPasswordValid($user, $plainPassword)) {
             return $this->json(['error' => 'Invalid credentials.'], Response::HTTP_UNAUTHORIZED);
         }
 

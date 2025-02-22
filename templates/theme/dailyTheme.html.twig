@@ -1,48 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <main class="flex justify-center bg-white shadow-lg h-[800px]">
+    <main class="flex justify-center bg-white shadow-lg h-auto">
         <div class="container mt-4 flex flex-col justify-center items-center">
-
+            <!-- Thème du jour -->
             <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
                 <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
                     {% if theme %}
-                        THEME DU JOUR: {{ theme.title }}
+                        THÈME DU JOUR: {{ theme.title }}
                     {% else %}
-                        THEME
+                        THÈME
                     {% endif %}
                 </h3>
-
-                <div class="mx-auto">
-                    {% if theme is defined and theme is not null %}
-                        <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base mt-4">
-                            {{ theme.content }}
-                        </p>
-                    {% else %}
-                        <p class="text-gray-700 font-medium text-center">
-                            Aucun contenu disponible pour aujourd'hui.
-                        </p>
-                    {% endif %}
-                </div>
+                <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base mt-4">
+                    {{ theme.content }}
+                </p>
             </div>
 
-            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
-                <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
-                    SYNTHÈSE
-                </h3>
-                <div class="mx-auto">
-                    {% if theme and theme.synthesis %}
-                        <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base">
-                            {{ theme.synthesis.content }}
-                        </p>
-                    {% else %}
-                        <p class="text-gray-700 font-medium text-center">
-                            Aucune synthèse disponible pour ce thème.
-                        </p>
-                    {% endif %}
-                </div>
+            <!-- Section Commentaires -->
+            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4 w-full max-w-2xl">
+                <h3 class="text-2xl font-bold text-blue-700 mb-4">Commentaires</h3>
+
+                {% for commentary in commentaries %}
+                    <div class="border-b py-2">
+                        <p class="text-gray-800 font-bold">{{ commentary.user.email }}</p>
+                        <p class="text-gray-600">{{ commentary.content }}</p>
+                        <small class="text-gray-500">{{ commentary.createdAt|date('d/m/Y H:i') }}</small>
+                    </div>
+                {% else %}
+                    <p class="text-gray-600">Aucun commentaire pour le moment.</p>
+                {% endfor %}
             </div>
 
+            <!-- Formulaire d'ajout de commentaire -->
+            {% if is_granted('ROLE_USER') %}
+                <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4 w-full max-w-2xl">
+                    <h3 class="text-2xl font-bold text-blue-700 mb-4">Ajouter un commentaire</h3>
+                    {{ form_start(form) }}
+                    {{ form_row(form.content, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Envoyer</button>
+                    {{ form_end(form) }}
+                </div>
+            {% else %}
+                <p class="text-gray-600 mt-4">Connectez-vous pour commenter.</p>
+            {% endif %}
         </div>
     </main>
 {% endblock %}

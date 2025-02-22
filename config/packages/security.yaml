@@ -11,6 +11,7 @@ security:
                 property: email
     firewalls:
         dev:
+            stateless: false
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         api:

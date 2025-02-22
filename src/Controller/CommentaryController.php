@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class CommentaryController extends AbstractController
 {
     #[Route('/commentaries', name: 'commentaries_list', methods: ['GET'])]
-    public function cGetCommentary(EntityManagerInterface $entityManager): Response
+    public function cgetCommentary(EntityManagerInterface $entityManager): Response
     {
         $commentaries = $entityManager->getRepository(Commentary::class)->findAll();
 
