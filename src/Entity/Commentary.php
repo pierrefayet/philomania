@@ -17,9 +17,6 @@ class Commentary
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column]
     private ?int $userId = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -30,6 +27,27 @@ class Commentary
     #[ORM\JoinColumn(nullable: false)]
     private ?Theme $theme = null;
 
+    #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isReported = false;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function isReported(): bool
+    {
+        return $this->isReported;
+    }
+
+    public function setIsReported(bool $isReported): self
+    {
+        $this->isReported = $isReported;
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;

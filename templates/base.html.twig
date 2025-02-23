@@ -5,16 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Philomanie{% endblock %}</title>
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('build/assets_styles_app_css.css') }}">
+        {% if app.environment == 'prod' %}
+        {{ encore_entry_link_tags('styles') }}
+        {% else %}
+    <link rel="stylesheet" href="{{ asset('build/assets_styles_app_css.css') }}">
+        {% endif %}
         <link rel="icon" href="{{ asset('build/images/favicon.webp') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
               rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     {% endblock %}
 </head>
 <body class="bg-gradient-to-r from-blue-400 via-blue-500 to-indigo-600 ">
+    {% block messages %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}
+                        {% if label == 'success' %} bg-green-500 text-white
+                        {% elseif label == 'warning' %} bg-yellow-400 text-black
+                        {% elseif label == 'error' %} bg-red-500 text-white
+                        {% else %} bg-gray-300 text-black {% endif %}
+                        p-4 rounded-md mb-4">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+
 <header class="bg-blue-500 relative h-[200px] z-10">
     <div class="flex justify-between items-center px-8 py-4 h-full overflow-visible mx-4">
         <h1 class="font-merriweather-sans text-4xl font-bold text-white mt-2">Philomanie</h1>
@@ -35,27 +54,31 @@
                 <div x-show="open" @click.away="open = false"
                      class="absolute left-0 top-full w-48 bg-blue-600 shadow-lg rounded-md z-50">
                     <a href="{{ path('daily-theme') }}" class="block px-4 py-2 hover:bg-blue-700">
-                            Thème du jour
+                        Thème du jour
                     </a>
                     <a href="{{ path('theme_list') }}" class="block px-4 py-2 hover:bg-blue-700">Theme List</a>
                     {% if app.user and is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('theme_create') }}" class="block px-4 py-2 hover:bg-blue-700">Créer un Thème</a>
+                        <a href="{{ path('theme_create') }}" class="block px-4 py-2 hover:bg-blue-700">Créer un
+                            Thème</a>
                     {% endif %}
                 </div>
             </div>
             {% if app.user and is_granted('ROLE_ADMIN') %}
-            <div x-data="{ open: false }" class="relative">
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="hover:text-gray-300 flex items-center">
-                        Synthese <span class="ml-2 transform" :class="open ? 'rotate-180' : ''">▼</span>
-                    </button>
-                    <div x-show="open" @click.away="open = false"
-                         class="absolute left-0 top-full mt-2 w-48 bg-blue-600 shadow-lg rounded-md z-50">
-                        <a href="{{ path('app_synthesis_create') }}" class="block px-4 py-2 hover:bg-blue-700">Création</a>
-                        <a href="{{ path('synthesis_list') }}" class="block px-4 py-2 hover:bg-blue-700">Liste</a>
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="hover:text-gray-300 flex items-center">
+                            Synthese <span class="ml-2 transform" :class="open ? 'rotate-180' : ''">▼</span>
+                        </button>
+                        <div x-show="open" @click.away="open = false"
+                             class="absolute left-0 top-full mt-2 w-48 bg-blue-600 shadow-lg rounded-md z-50">
+                            <a href="{{ path('app_synthesis_create') }}" class="block px-4 py-2 hover:bg-blue-700">Création</a>
+                            <a href="{{ path('synthesis_list') }}" class="block px-4 py-2 hover:bg-blue-700">Liste</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <a href="{{ path('dashboard') }}" class="hover:text-gray-300 font-semibold">
+                    Modération
+                </a>
             {% endif %}
             {% if app.user %}
                 <a href="{{ path('app_logout') }}" class="hover:text-gray-300">Déconnexion</a>
@@ -74,7 +97,7 @@
 {% endblock %}
 
 <footer id="footer" class="flex justify-center items-center space-x-4 h-[100px]">
-    <p class="font-montserrat font-medium text-white">&copy; Copyright 2024</p>
+    <p class="font-montserrat font-medium text-white">&copy; Copyright 2025</p>
     <a href="https://example.com/" class="font-montserrat font-medium text-white hover:text-gray-300">Pierre Fayet</a>
 </footer>
 

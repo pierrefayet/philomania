@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Modération {% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto my-8 p-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-3xl font-semibold text-blue-900 mb-6">🛠️ Panneau de Modération</h1>
+        <section class="mb-8">
+            <h2 class="text-xl font-bold text-blue-800 mb-4">📝 Commentaires</h2>
+
+            {% if comments is empty %}
+                <p class="text-gray-600 italic">Aucun commentaire pour le moment.</p>
+            {% else %}
+                <ul class="space-y-4">
+                    {% for comment in comments %}
+                        <li class="p-4 bg-gray-100 rounded-lg shadow-md flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-700 font-medium">{{ comment.content }}</p>
+                                <p class="text-sm text-gray-500">Posté par <strong>{{ comment.user.email }}</strong></p>
+                            </div>
+                            <form method="post" action="{{ path('delete_comment', {id: comment.id}) }}">
+                                <button type="submit"
+                                        class="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition">
+                                    🗑️ Supprimer
+                                </button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </section>
+        <section>
+            <h2 class="text-xl font-bold text-blue-800 mb-4">👤 Utilisateurs</h2>
+
+            {% if users is empty %}
+                <p class="text-gray-600 italic">Aucun utilisateur pour le moment.</p>
+            {% else %}
+                <ul class="space-y-4">
+                    {% for user in users %}
+                        <li class="p-4 bg-gray-100 rounded-lg shadow-md flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-800 font-semibold">{{ user.email }}</p>
+                                {% if user.isBanned() %}
+                                    <p class="text-sm text-red-500">🚫 Utilisateur banni</p>
+                                {% endif %}
+                            </div>
+                            {% if not user.isBanned() %}
+                                <form method="post" action="{{ path('ban_user', {id: user.id}) }}">
+                                    <button type="submit"
+                                            class="bg-yellow-500 text-blue-600 px-4 py-2 rounded-lg shadow hover:bg-yellow-600 transition">
+                                        ⚠️ Bannir l'utilisateur
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </section>
+    </div>
+{% endblock %}

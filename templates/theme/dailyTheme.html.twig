@@ -5,15 +5,18 @@
         <div class="container mt-4 flex flex-col justify-center items-center">
             <!-- Thème du jour -->
             <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
+                <h2 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
+                    THEME DU JOUR
+                </h2>
                 <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
                     {% if theme %}
-                        THÈME DU JOUR: {{ theme.title }}
+                        {{ theme.title }}
                     {% else %}
                         THÈME
                     {% endif %}
                 </h3>
                 <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base mt-4">
-                    {{ theme.content }}
+                    {{ theme.content|e }}
                 </p>
             </div>
 
@@ -22,28 +25,50 @@
                 <h3 class="text-2xl font-bold text-blue-700 mb-4">Commentaires</h3>
 
                 {% for commentary in commentaries %}
-                    <div class="border-b py-2">
+                    <div class="border-b py-2 mt-4 mb-4">
                         <p class="text-gray-800 font-bold">{{ commentary.user.email }}</p>
-                        <p class="text-gray-600">{{ commentary.content }}</p>
+                        <p class="text-gray-600 mt-4 mb-4">{{ commentary.content|e }}</p>
                         <small class="text-gray-500">{{ commentary.createdAt|date('d/m/Y H:i') }}</small>
                     </div>
                 {% else %}
                     <p class="text-gray-600">Aucun commentaire pour le moment.</p>
                 {% endfor %}
             </div>
-
-            <!-- Formulaire d'ajout de commentaire -->
-            {% if is_granted('ROLE_USER') %}
-                <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4 w-full max-w-2xl">
+            {% if app.user %}
+                <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4 mb-6 w-full max-w-2xl">
                     <h3 class="text-2xl font-bold text-blue-700 mb-4">Ajouter un commentaire</h3>
-                    {{ form_start(form) }}
-                    {{ form_row(form.content, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-2">Envoyer</button>
+
+                    {{ form_start(form, {'action': path('app_commentary_create', {'themeId': theme.id}), 'method': 'POST'}) }}
+                    <div class="mb-4">
+                        {{ form_row(form.content, {'attr': {'class': 'w-full p-4 border rounded-md'}}) }}
+                    </div>
+                    <button
+                            type="submit"
+                            class="w-full p-4 bg-blue-700 text-blue bold text-lg py-3 rounded-lg shadow-md hover:bg-blue-800 focus:outline-none focus:ring focus:ring-blue-200"
+                            aria-label="Envoyer mon commentaire">
+                        💬 Envoyer mon commentaire
+                    </button>
+                    <div class="hidden hover:bg-blue-800"></div>
+
                     {{ form_end(form) }}
                 </div>
             {% else %}
-                <p class="text-gray-600 mt-4">Connectez-vous pour commenter.</p>
+                <p class="text-gray-600 mt-4">Vous devez être connecté pour poster un commentaire.</p>
             {% endif %}
+
+            <div class="p-8 rounded-lg shadow-lg bg-blue-50 mt-4">
+                <h2 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
+                    SYNTHESE
+                </h2>
+                <h3 class="font-merriweather-sans text-center text-2xl font-bold text-blue-700 mb-4">
+                    {% if synthesis %}
+                        {{ synthesis.title }}
+                </h3>
+                <p class="font-montserrat text-gray-700 leading-relaxed text-sm md:text-base mt-4">
+                    {{ synthesis.content|e }}
+                    {% endif %}
+                </p>
+            </div>
         </div>
     </main>
 {% endblock %}

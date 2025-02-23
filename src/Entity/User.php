@@ -37,6 +37,19 @@ class User implements UserInterface, JWTUserInterface, PasswordAuthenticatedUser
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isBan = false;
+
+    public function isBan(): bool
+    {
+        return $this->isBan;
+    }
+
+    public function setIsBanned(bool $isBan): void
+    {
+        $this->isBan = $isBan;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -130,5 +143,10 @@ class User implements UserInterface, JWTUserInterface, PasswordAuthenticatedUser
         $user->roles = $payload['roles'] ?? ['ROLE_USER'];
 
         return $user;
+    }
+
+    public function isBanned(): bool
+    {
+        return in_array('ROLE_BANNED', $this->roles, true);
     }
 }

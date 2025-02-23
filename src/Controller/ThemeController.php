@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Commentary;
+use App\Entity\Synthesis;
 use App\Entity\Theme;
 use App\Entity\User;
 use App\Form\CommentaryFormType;
@@ -64,10 +65,14 @@ class ThemeController extends AbstractController
             throw $this->createNotFoundException('Thème introuvable.');
         }
 
+        $commentaries = $entityManager->getRepository(Commentary::class)->findByThemeWithUser($theme->getId());
+
         return $this->render('theme/themeDetail.html.twig', [
             'theme' => $theme,
+            'commentaries' => $commentaries,
         ]);
     }
+
 
     #[Route('/daily-theme', name: 'daily-theme', methods: ['GET', 'POST'])]
     public function dailyTheme(Request $request, EntityManagerInterface $entityManager): Response
@@ -95,7 +100,6 @@ class ThemeController extends AbstractController
 
             $commentary->setUser($this->getUser());
             $commentary->setTheme($theme);
-            $commentary->setCreatedAt(new \DateTimeImmutable());
 
             $entityManager->persist($commentary);
             $entityManager->flush();
@@ -103,9 +107,12 @@ class ThemeController extends AbstractController
             return $this->redirectToRoute('daily-theme');
         }
 
+        $synthesis = $theme->getSynthesis();
+
         return $this->render('/theme/dailyTheme.html.twig', [
             'theme' => $theme,
             'commentaries' => $commentaries,
+            'synthesis' => $synthesis,
             'form' => $form->createView()
         ]);
     }

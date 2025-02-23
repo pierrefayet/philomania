@@ -7,6 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ *
  * @extends ServiceEntityRepository<Commentary>
  */
 class CommentaryRepository extends ServiceEntityRepository
@@ -22,8 +23,8 @@ class CommentaryRepository extends ServiceEntityRepository
     public function findByThemeWithUser(int $themeId): array
     {
         return $this->createQueryBuilder('c')
-            ->select('c, u.email')
             ->join('c.user', 'u')
+            ->addSelect('u')
             ->where('c.theme = :themeId')
             ->setParameter('themeId', $themeId)
             ->orderBy('c.createdAt', 'DESC')

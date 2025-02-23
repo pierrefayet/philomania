@@ -14,24 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CommentaryController extends AbstractController
 {
-    #[Route('/commentaries', name: 'commentaries_list', methods: ['GET'])]
-    public function cgetCommentary(EntityManagerInterface $entityManager): Response
-    {
-        $commentaries = $entityManager->getRepository(Commentary::class)->findAll();
-
-        return $this->render('commentary/postCommentary.html.twig', [
-            'commentaries' => $commentaries
-        ]);
-    }
-
-    #[Route('/commentary/{id}', name: 'commentaries_detail', methods: ['GET'])]
-    public function getCommentaries(Commentary $commentary): Response
-    {
-        return $this->render('commentary/postCommentary.html.twig', [
-            'commentary' => $commentary,
-        ]);
-    }
-
     #[Route('/commentary/create/{themeId}', name: 'app_commentary_create', methods: ['POST', 'GET'])]
     public function postCommentary(Request $request, EntityManagerInterface $entityManager, int $themeId): Response
     {
@@ -60,11 +42,29 @@ class CommentaryController extends AbstractController
 
             $this->addFlash('success', 'Le commentaire a été créé avec succès.');
 
-            return $this->redirectToRoute('theme', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('daily-theme');
         }
 
-        return $this->render('commentary/postCommentary.html.twig', [
+        return $this->render('commentary/moderation.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/commentaries', name: 'commentaries_list', methods: ['GET'])]
+    public function cgetCommentary(EntityManagerInterface $entityManager): Response
+    {
+        $commentaries = $entityManager->getRepository(Commentary::class)->findAll();
+
+        return $this->render('commentary/moderation.html.twig', [
+            'commentaries' => $commentaries
+        ]);
+    }
+
+    #[Route('/commentary/{id}', name: 'commentaries_detail', methods: ['GET'])]
+    public function getCommentaries(Commentary $commentary): Response
+    {
+        return $this->render('commentary/moderation.html.twig', [
+            'commentary' => $commentary,
         ]);
     }
 
@@ -89,11 +89,11 @@ class CommentaryController extends AbstractController
 
             $this->addFlash('success', 'Le commentaire a été mise à jour avec succès.');
 
-            return $this->redirectToRoute('theme', ['id' => $theme->getId()]);
+            return $this->redirectToRoute('daily-theme');
         }
 
 
-        return $this->render('commentary/postCommentary.html.twig', [
+        return $this->render('commentary/moderation.html.twig', [
             'controller_name' => 'CommentaryController',
         ]);
     }
@@ -111,7 +111,7 @@ class CommentaryController extends AbstractController
 
         if (!$this->isCsrfTokenValid('delete' . $commentary->getId(), $submittedToken)) {
             $this->addFlash('error', 'Token CSRF invalide.');
-            return $this->redirectToRoute('theme');
+            return $this->redirectToRoute('daily-theme');
         }
 
         $entityManager->remove($commentary);
@@ -119,6 +119,6 @@ class CommentaryController extends AbstractController
 
         $this->addFlash('success', 'Le commentaire a été supprimé avec succès.');
 
-        return $this->redirectToRoute('theme');
+        return $this->redirectToRoute('daily-theme');
     }
 }

@@ -70,6 +70,7 @@ security:
          - { path: ^/commentaries, roles: PUBLIC_ACCESS }
          - { path: ^/commentary, roles: PUBLIC_ACCESS }
 
+
 when@test:
     security:
         password_hashers:
